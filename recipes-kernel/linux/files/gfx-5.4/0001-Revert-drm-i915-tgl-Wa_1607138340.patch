@@ -1,0 +1,32 @@
+From bd0f4539fad7508fe21b29e6143e01661eb2f7d8 Mon Sep 17 00:00:00 2001
+From: "Chew, Tong Liang" <tong.liang.chew@intel.com>
+Date: Thu, 2 Jan 2020 08:40:03 +0800
+Subject: [PATCH] Revert "drm/i915/tgl: Wa_1607138340"
+
+This reverts commit 290e2f487f7d5938e351c7a7b458541afb311f48.
+
+This lite restore patch has given a multiple gpu hung for media rendering to compositor.
+cs hang doesn't seem to hang with this revert.
+Signed-off-by: Chew, Tong Liang <tong.liang.chew@intel.com>
+---
+ drivers/gpu/drm/i915/gt/intel_lrc.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c b/drivers/gpu/drm/i915/gt/intel_lrc.c
+index 1975fe4775d2..36b648161a98 100644
+--- a/drivers/gpu/drm/i915/gt/intel_lrc.c
++++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
+@@ -1229,10 +1229,6 @@ static u64 execlists_update_context(const struct i915_request *rq)
+ 	desc = ce->lrc_desc;
+ 	ce->lrc_desc &= ~CTX_DESC_FORCE_RESTORE;
+ 
+-	/* Wa_1607138340:tgl */
+-	if (IS_TGL_REVID(rq->i915, TGL_REVID_A0, TGL_REVID_A0))
+-		desc |= CTX_DESC_FORCE_RESTORE;
+-
+ 	return desc;
+ }
+ 
+-- 
+2.23.0
+

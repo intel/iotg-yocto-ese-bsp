@@ -1,0 +1,3 @@
+patch gfx-5.4/0001-Revert-drm-i915-tgl-Wa_1607138340.patch
+patch gfx-5.4/0001-drm-i915-Default-to-a-more-lenient-forced-preemption.patch
+
