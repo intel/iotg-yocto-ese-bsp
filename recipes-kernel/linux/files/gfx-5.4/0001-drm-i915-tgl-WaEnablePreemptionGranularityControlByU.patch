@@ -1,0 +1,50 @@
+From 4c5b4d9a63abae53b2c8a1257e30dee1f887d3d8 Mon Sep 17 00:00:00 2001
+From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Date: Thu, 30 Jan 2020 11:31:07 +0000
+Subject: [PATCH] drm/i915/tgl: WaEnablePreemptionGranularityControlByUMD
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Enable FtrPerCtxtPreemptionGranularityControl bit and whitelist
+GEN8_CS_CHICKEN1 so WaEnablePreemptionGranularityControlByUMD is
+implemented.
+
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc: Michał Winiarski <michal.winiarski@intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: piotr.zdunowski@intel.com
+Cc: michal.mrozek@intel.com
+Acked-by: Chris Wilson <chris@chris-wilson.co.uk>
+---
+ drivers/gpu/drm/i915/gt/intel_workarounds.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_workarounds.c b/drivers/gpu/drm/i915/gt/intel_workarounds.c
+index f5e24edffdee..ed5e8283e815 100644
+--- a/drivers/gpu/drm/i915/gt/intel_workarounds.c
++++ b/drivers/gpu/drm/i915/gt/intel_workarounds.c
+@@ -1253,6 +1253,9 @@ static void tgl_whitelist_build(struct intel_engine_cs *engine)
+ 		whitelist_reg_ext(w, PS_INVOCATION_COUNT,
+ 				  RING_FORCE_TO_NONPRIV_ACCESS_RD |
+ 				  RING_FORCE_TO_NONPRIV_RANGE_4);
++
++		/* WaEnablePreemptionGranularityControlByUMD:tgl */
++		whitelist_reg(w, GEN8_CS_CHICKEN1);
+ 		break;
+ 	default:
+ 		break;
+@@ -1403,8 +1406,8 @@ rcs_engine_wa_init(struct intel_engine_cs *engine, struct i915_wa_list *wal)
+ 				   0);
+ 	}
+ 
+-	if (IS_GEN_RANGE(i915, 9, 11)) {
+-		/* FtrPerCtxtPreemptionGranularityControl:skl,bxt,kbl,cfl,cnl,icl */
++	if (IS_GEN_RANGE(i915, 9, 12)) {
++		/* FtrPerCtxtPreemptionGranularityControl:skl,bxt,kbl,cfl,cnl,icl,tgl */
+ 		wa_masked_en(wal,
+ 			     GEN7_FF_SLICE_CS_CHICKEN1,
+ 			     GEN9_FFSC_PERCTX_PREEMPT_CTRL);
+-- 
+2.24.0
+

@@ -1,0 +1,38 @@
+From 87b288df1305c3e9188fc88f1369d3049b57327a Mon Sep 17 00:00:00 2001
+From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Date: Thu, 30 Jan 2020 11:31:08 +0000
+Subject: [PATCH] drm/i915/tgl: WaDisableGPGPUMidThreadPreemption
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Make thread-group preemption default because...?
+
+Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Cc: Michał Winiarski <michal.winiarski@intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: piotr.zdunowski@intel.com
+Cc: michal.mrozek@intel.com
+---
+ drivers/gpu/drm/i915/gt/intel_workarounds.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_workarounds.c b/drivers/gpu/drm/i915/gt/intel_workarounds.c
+index ed5e8283e815..129bc134374c 100644
+--- a/drivers/gpu/drm/i915/gt/intel_workarounds.c
++++ b/drivers/gpu/drm/i915/gt/intel_workarounds.c
+@@ -592,6 +592,11 @@ static void tgl_ctx_workarounds_init(struct intel_engine_cs *engine,
+ 	wa_add(wal, FF_MODE2, FF_MODE2_TDS_TIMER_MASK, val,
+ 	       IS_TGL_REVID(engine->i915, TGL_REVID_A0, TGL_REVID_A0) ? 0 :
+ 			    FF_MODE2_TDS_TIMER_MASK);
++
++	/* WaDisableGPGPUMidThreadPreemption:tgl */
++	WA_SET_FIELD_MASKED(GEN8_CS_CHICKEN1,
++			    GEN9_PREEMPT_GPGPU_LEVEL_MASK,
++			    GEN9_PREEMPT_GPGPU_THREAD_GROUP_LEVEL);
+ }
+ 
+ static void
+-- 
+2.24.0
+

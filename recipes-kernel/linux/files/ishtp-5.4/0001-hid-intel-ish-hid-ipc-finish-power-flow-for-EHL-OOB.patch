@@ -1,0 +1,48 @@
+From d1e078d580101915a912002a4bfc3a082a0ec524 Mon Sep 17 00:00:00 2001
+From: Even Xu <even.xu@intel.com>
+Date: Thu, 6 Feb 2020 14:39:16 +0800
+Subject: [PATCH] hid: intel-ish-hid: ipc: finish power flow for EHL OOB
+
+1. Add pci_set_power_state() to clean PME assert when resume from Sx.
+2. Add pci_pme_active() to enable PME
+
+Signed-off-by: Even Xu <even.xu@intel.com>
+Signed-off-by: Chinnu, Ganapathi <ganapathi.chinnu@intel.com>
+---
+ drivers/hid/intel-ish-hid/ipc/pci-ish.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+index 784dcc8..d7f6b84 100644
+--- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
++++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+@@ -172,6 +172,12 @@ static int ish_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	init_waitqueue_head(&ishtp->suspend_wait);
+ 	init_waitqueue_head(&ishtp->resume_wait);
+ 
++	/* Enable PME for EHL */
++	if (pdev->device == EHL_Ax_DEVICE_ID) {
++		pci_pme_active(pdev, true);
++		dev_warn(dev, "active pme for ehl\n");
++	}
++
+ 	ret = ish_init(ishtp);
+ 	if (ret)
+ 		return ret;
+@@ -309,6 +315,13 @@ static int __maybe_unused ish_resume(struct device *device)
+ 	struct pci_dev *pdev = to_pci_dev(device);
+ 	struct ishtp_device *dev = pci_get_drvdata(pdev);
+ 
++	/* add this to finish power flow for EHL */
++	if (dev->pdev->device == EHL_Ax_DEVICE_ID) {
++		pci_set_power_state(pdev, PCI_D0);
++		pci_pme_active(pdev, true);
++		dev_warn(dev->devc, "power flow finished for ehl\n");
++	}
++
+ 	ish_resume_device = device;
+ 	dev->resume_flag = 1;
+ 
+-- 
+2.7.4
+

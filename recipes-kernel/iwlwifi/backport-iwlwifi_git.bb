@@ -10,14 +10,12 @@ LIC_FILES_CHKSUM = "file://${S}/COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 inherit module
 
 SRC_URI = "git://github.com/intel/backport-iwlwifi.git;nobranch=1;protocol=https \
-           file://0001-iwlwifi-Integration-changes-on-core47_82-for-yocto-E.patch;striplevel=2 \
            file://0001-Makefile.real-skip-host-install-scripts.patch \
-           file://0001-iwlwifi-linux-5.4-compatibility-fixes.patch;striplevel=2 \
            file://iwlwifi.conf \
           "
 
-PV = "47-82+git${SRCPV}"
-SRCREV = "df37c4b595dc257a6ca6353dedf0aaa590322055"
+PV = "50-70+git${SRCPV}"
+SRCREV = "19f496f990eab186f8220b7ba442f46c55dc56d5"
 
 S = "${WORKDIR}/git/iwlwifi-stack-dev"
 
