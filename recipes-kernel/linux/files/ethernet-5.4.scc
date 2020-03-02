@@ -1,3 +1,6 @@
 patch ethernet-5.4/0001-Revert-REVERTME-x86-tsc-WA-for-incorrect-ART-TSC-con.patch
 patch ethernet-5.4/0002-REVERTME-x86-tsc-WA-for-incorrect-ART-TSC-conversion.patch
 patch ethernet-5.4/0001-net-stmmac-Add-CBS-configuration-for-2.5Gbps.patch
+patch ethernet-5.4/0002-net-networkproxy-fix-netprox_host_proxy_exit-called-.patch
+patch ethernet-5.4/0003-net-stmmac-remove-rtnl_lock-in-netprox-resume-task.patch
+patch ethernet-5.4/0005-net-stmmac-fix-reuse-of-stmmac_notifier.patch

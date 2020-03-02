@@ -13,3 +13,7 @@ patch io-5.4/ehl-er4/0001-serial-8250_dwlib-Basic-RS485-support.patch
 patch io-5.4/ehl-er4/0002-serial-Preliminary-support-for-9-bit-transfer-mode-w.patch
 patch io-5.4/ehl-er4/0003-serial-8250_dwlib-Support-for-9-bit-transfer-mode.patch
 patch io-5.4/ehl-er4/0004-serial-8250-dwlib-Unsetting-default-DE_POL-and-RE_PO.patch
+
+patch io-5.4/0001-Revert-HACK-scsi-ufs-Add-module-parameters-max_gear-.patch
+patch io-5.4/0002-HACK-scsi-ufs-Add-module-parameters-max_gear-dflt_hs.patch
+patch io-5.4/0001-counter-intel-qep-Enable-clock-divisor.patch
