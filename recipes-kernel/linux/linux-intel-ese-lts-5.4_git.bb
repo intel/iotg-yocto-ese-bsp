@@ -2,7 +2,7 @@ KERNEL_SRC_URI ?= "git://github.com/intel/mainline-tracking.git;protocol=https;n
 SRC_URI = "${KERNEL_SRC_URI}"
 SRCREV_machine ?= "20d7cc9253aecac2d614b5eaf066f2562ece29ae"
 LINUX_VERSION ?= "5.4"
-LINUX_KERNEL_TYPE = "mainline-tracking"
+LINUX_KERNEL_TYPE = "lts"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
 require recipes-kernel/linux/linux-intel-ese.inc

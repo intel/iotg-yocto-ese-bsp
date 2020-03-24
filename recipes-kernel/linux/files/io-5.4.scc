@@ -1,13 +1,4 @@
 patch io-5.4/0001-ptp-Clear-RIS-after-masking-for-interrupts.patch
-patch io-5.4/0001-i2c-i801-Correct-Intel-Jasper-Lake-SOC-naming.patch
-patch io-5.4/0002-spi-pxa2xx-Add-support-for-Intel-Comet-Lake-PCH-V.patch
-patch io-5.4/0003-mtd-spi-nor-intel-spi-add-support-for-Intel-Cannon-L.patch
-patch io-5.4/0004-mtd-spi-nor-intel-spi-Add-support-for-Intel-Comet-La.patch
-patch io-5.4/0001-pinctrl-sunrisepoint-Add-Coffee-Lake-S-ACPI-ID.patch
-patch io-5.4/0002-i2c-i801-Add-support-for-Intel-Comet-Lake-PCH-V.patch
-patch io-5.4/0001-mfd-intel-lpss-Add-Intel-Comet-Lake-PCH-V-PCI-IDs.patch
-patch io-5.4/0001-xhci-fix-runtime-pm-enabling-for-quirky-Intel-hosts.patch
-patch io-5.4/0002-xhci-apply-XHCI_PME_STUCK_QUIRK-to-Intel-Comet-Lake-.patch
 
 patch io-5.4/ehl-er4/0001-serial-8250_dwlib-Basic-RS485-support.patch
 patch io-5.4/ehl-er4/0002-serial-Preliminary-support-for-9-bit-transfer-mode-w.patch

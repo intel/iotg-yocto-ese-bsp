@@ -1,6 +1,3 @@
-patch gfx-5.4/0001-drm-i915-Default-to-a-more-lenient-forced-preemption.patch
-patch gfx-5.4/0001-Revert-drm-i915-tgl-Wa_1607138340.patch
-patch gfx-5.4/0001-drm-i915-tgl-Implement-Wa_1604555607.patch
 patch gfx-5.4/0001-drm-i915-tgl-WaEnablePreemptionGranularityControlByU.patch
 patch gfx-5.4/0001-drm-i915-tgl-WaDisableGPGPUMidThreadPreemption.patch
 patch gfx-5.4/0001-drm-i915-tgl-Add-Wa_1808121037-to-tgl.patch
