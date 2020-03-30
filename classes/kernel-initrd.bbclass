@@ -40,4 +40,5 @@ python(){
         d.appendVarFlag("do_kernel_configme", "postfuncs", " do_put_initramfs")
         # workaround to force rebuild if image updated
         d.appendVarFlag("do_compile", flag, " " + image + ":do_image_complete")
+        d.appendVar('SRC_URI', ' file://common/initrd-embed.scc')
 }

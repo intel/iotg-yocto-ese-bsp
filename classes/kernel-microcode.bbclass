@@ -30,5 +30,5 @@ python do_put_iucode(){
 
 python(){
     d.appendVarFlag("do_kernel_configme", "postfuncs", " do_put_iucode")
+    d.appendVar('SRC_URI', ' file://common/fw-embed.scc')
 }
-

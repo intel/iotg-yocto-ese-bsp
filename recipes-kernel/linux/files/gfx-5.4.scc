@@ -1,4 +1,2 @@
-patch gfx-5.4/0001-drm-i915-tgl-WaEnablePreemptionGranularityControlByU.patch
-patch gfx-5.4/0001-drm-i915-tgl-WaDisableGPGPUMidThreadPreemption.patch
-patch gfx-5.4/0001-drm-i915-tgl-Add-Wa_1808121037-to-tgl.patch
 patch gfx-5.4/0001-drm-i915-do-not-set-bits-1-11-in-gen12-ptes.patch
+patch gfx-5.4/0001-drm-i915-Fix-display-audio-issue.patch

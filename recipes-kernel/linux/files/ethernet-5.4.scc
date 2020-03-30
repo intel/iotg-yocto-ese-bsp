@@ -1,2 +1,8 @@
 patch ethernet-5.4/0001-net-stmmac-Change-PSE-PTP-clock-source-to-PLL_PTP.patch
 patch ethernet-5.4/0002-net-phy-Introducing-support-for-DWC-xpcs-Energy-Effi.patch
+patch ethernet-5.4/0001-net-stmmac-Add-PCI-IDs-for-TGL-H-platform.patch
+patch ethernet-5.4/0002-net-stmmac-move-a2h-packet-copying-function-out-from.patch
+patch ethernet-5.4/0003-net-stmmac-REVERTME-WA-for-incorrect-ART-TSC-convers.patch
+patch ethernet-5.4/0004-net-stmmac-Fix-incorrect-handling-of-TX-RX-interrupt.patch
+patch ethernet-5.4/0005-net-stmmac-Fix-issue-where-MAC-Timestamp-interrupt-i.patch
+patch ethernet-5.4/0006-net-stmmac-Restructure-HW-Crosstimestamping-to-use-M.patch

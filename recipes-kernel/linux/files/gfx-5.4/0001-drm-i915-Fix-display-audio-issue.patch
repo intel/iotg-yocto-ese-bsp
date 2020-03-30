@@ -1,0 +1,31 @@
+From d4eb2c07e6f94e812dfe86fcb11cdc366b3a3574 Mon Sep 17 00:00:00 2001
+From: sweeaun <swee.aun.khor@intel.com>
+Date: Thu, 26 Mar 2020 16:34:51 +0800
+Subject: [PATCH] drm/i915: Fix display audio issue
+
+This patch is to fix no display audio issue during boot up, also
+to fix the previous patch that causing eDP display does not work.
+
+Signed-off-by: sweeaun <swee.aun.khor@intel.com>
+---
+ drivers/gpu/drm/i915/display/intel_display.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/display/intel_display.c b/drivers/gpu/drm/i915/display/intel_display.c
+index 4d1634ed6a1b..c60e21444c68 100644
+--- a/drivers/gpu/drm/i915/display/intel_display.c
++++ b/drivers/gpu/drm/i915/display/intel_display.c
+@@ -14111,8 +14111,8 @@ static int intel_atomic_check(struct drm_device *dev,
+ 	/* Catch I915_MODE_FLAG_INHERITED */
+ 	for_each_oldnew_intel_crtc_in_state(state, crtc, old_crtc_state,
+ 					    new_crtc_state, i) {
+-		if (new_crtc_state->hw.mode.private_flags !=
+-		    old_crtc_state->hw.mode.private_flags)
++		if (new_crtc_state->uapi.mode.private_flags !=
++		    old_crtc_state->uapi.mode.private_flags)
+ 			new_crtc_state->uapi.mode_changed = true;
+ 	}
+ 
+-- 
+2.25.1
+
