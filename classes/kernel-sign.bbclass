@@ -9,3 +9,7 @@ python(){
     d.appendVar('PACKAGES', ' ' + d.getVar('KERNEL_PACKAGE_NAME') + '-image-signed')
     d.setVar(d.expand("FILES_${KERNEL_PACKAGE_NAME}-image-signed"), d.expand("/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_PACKAGE_NAME}"))
 }
+
+kernel_do_deploy_append() {
+        install -m 0644 ${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_PACKAGE_NAME} ${DEPLOYDIR}/${KERNEL_IMAGETYPE}-${KERNEL_PACKAGE_NAME}.signed
+}

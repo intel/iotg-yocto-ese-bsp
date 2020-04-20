@@ -1,0 +1,12 @@
+# Custom script to enable wakeup for USB Mouse devices, the match is through enumerated USB Class(03h), Subclass(01h) and Interface(02h)
+ACTION=="add" \
+, SUBSYSTEM=="usb" \
+, ENV{ID_USB_INTERFACES}==":030102:" \
+, RUN+="/bin/sh -c 'echo enabled > /sys$env{DEVPATH}/power/wakeup'"
+
+
+# Custom script to enable wakeup for USB (BT) Mouse devices, the match is through enumerated USB Class(e0h), Subclass(01h) and Interface(01h)
+ACTION=="add" \
+, SUBSYSTEM=="usb" \
+, ENV{ID_USB_INTERFACES}==":e00101:" \
+, RUN+="/bin/sh -c 'echo enabled > /sys$env{DEVPATH}/power/wakeup'"

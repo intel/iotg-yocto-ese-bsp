@@ -12,3 +12,6 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 
 # RT specific configuration
 SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
+
+# resctrl patches for 5.4
+SRC_URI_append = " file://resctrl-5.4.scc"

@@ -1,45 +1,26 @@
-From 18cf068accded7fcc0055c9d372f903edc79f05e Mon Sep 17 00:00:00 2001
+From 19d898d871903e11cd19778a1375e955bfe57fca Mon Sep 17 00:00:00 2001
 From: "Song, Yoong Siang" <yoong.siang.song@intel.com>
 Date: Fri, 7 Feb 2020 18:10:30 +0800
 Subject: [PATCH] REVERTME: net: stmmac: Temporary enable D0i3 flow for PSE GbE
 
 Put the devices into D0i3 in suspend flow.
 
-Signed-off-by: Tan, Raymond <raymond.tan@intel.com>
 Signed-off-by: Song, Yoong Siang <yoong.siang.song@intel.com>
+Signed-off-by: Tan, Raymond <raymond.tan@intel.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c | 89 ++++++++++++++++++++++++
- include/linux/stmmac.h                           |  1 +
- 2 files changed, 90 insertions(+)
+ .../net/ethernet/stmicro/stmmac/stmmac_pci.c  | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-index 8a3744d..a29c3bf 100644
+index 7d35d662fa82..070101f9f3c4 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_pci.c
-@@ -412,6 +412,8 @@ static int ehl_pse0_common_data(struct pci_dev *pdev,
- 	else
- 		plat->clk_ptp_rate = 200000000;
- 
-+	plat->set_doi3 = 1;
-+
- 	/* store A2H packets in L2 SRAM, access through BAR0 + 128KB */
- #ifdef CONFIG_STMMAC_NETWORK_PROXY
- #if (CONFIG_STMMAC_NETWORK_PROXY_PORT == 0)
-@@ -472,6 +474,8 @@ static int ehl_pse1_common_data(struct pci_dev *pdev,
- 	else
- 		plat->clk_ptp_rate = 200000000;
- 
-+	plat->set_doi3 = 1;
-+
- 	/* store A2H packets in L2 SRAM, access through BAR0 + 128KB */
- #ifdef CONFIG_STMMAC_NETWORK_PROXY
- #if (CONFIG_STMMAC_NETWORK_PROXY_PORT == 1)
-@@ -1007,6 +1011,89 @@ static void stmmac_pci_remove(struct pci_dev *pdev)
+@@ -1022,6 +1022,87 @@ static void stmmac_pci_remove(struct pci_dev *pdev)
  	pci_disable_device(pdev);
  }
  
-+#define EHL_PSE_ETH_D0I3C	0x1000
-+#define EHL_PSE_ETH_CGSR	0x1004
++#define EHL_PSE_ETH_D0I3C	0x10410
++#define EHL_PSE_ETH_CGSR	0x10414
 +
 +#define EHL_PSE_ETH_D0I3_CIP	BIT(0)
 +#define EHL_PSE_ETH_D0I3_EN	BIT(2)
@@ -47,11 +28,11 @@ index 8a3744d..a29c3bf 100644
 +#define EHL_PSE_ETH_CGSR_CG	BIT(16)
 +static void ehl_pse_set_d0i3(struct pci_dev *pdev)
 +{
-+	struct plat_stmmacenet_data *plat;
 +	void __iomem *tempaddr = pcim_iomap_table(pdev)[0];
++	struct plat_stmmacenet_data *plat;
++	unsigned long j0, j1, delay;
 +	u32 d0i3c_reg;
 +	u32 cgsr_reg;
-+	unsigned long j0,j1,delay;
 +
 +	delay = msecs_to_jiffies(100);
 +	j0 = jiffies;
@@ -61,7 +42,7 @@ index 8a3744d..a29c3bf 100644
 +	if (!plat)
 +		return;
 +
-+	if (!plat->set_doi3)
++	if (!plat->is_pse)
 +		return;
 +
 +	cgsr_reg = readl(tempaddr + EHL_PSE_ETH_CGSR);
@@ -78,9 +59,8 @@ index 8a3744d..a29c3bf 100644
 +
 +	while (time_before(jiffies, j1)) {
 +		d0i3c_reg = readl(tempaddr + EHL_PSE_ETH_D0I3C);
-+		if (!(d0i3c_reg & EHL_PSE_ETH_D0I3_CIP)) {
++		if (!(d0i3c_reg & EHL_PSE_ETH_D0I3_CIP))
 +			break;
-+		}
 +	}
 +
 +	if (d0i3c_reg & EHL_PSE_ETH_D0I3_CIP) {
@@ -91,8 +71,8 @@ index 8a3744d..a29c3bf 100644
 +
 +static void ehl_pse_unset_d0i3(struct pci_dev *pdev)
 +{
-+	struct plat_stmmacenet_data *plat;
 +	void __iomem *tempaddr = pcim_iomap_table(pdev)[0];
++	struct plat_stmmacenet_data *plat;
 +	u32 d0i3c_reg;
 +	u32 cgsr_reg;
 +
@@ -100,7 +80,7 @@ index 8a3744d..a29c3bf 100644
 +	if (!plat)
 +		return;
 +
-+	if (!plat->set_doi3)
++	if (!plat->is_pse)
 +		return;
 +
 +	cgsr_reg = readl(tempaddr + EHL_PSE_ETH_CGSR);
@@ -111,7 +91,6 @@ index 8a3744d..a29c3bf 100644
 +	if (d0i3c_reg & EHL_PSE_ETH_D0I3_CIP) {
 +		dev_info(&pdev->dev, "%s d0i3c CIP detected", __func__);
 +	} else {
-+
 +		if (d0i3c_reg & EHL_PSE_ETH_D0I3_EN)
 +			d0i3c_reg &= ~EHL_PSE_ETH_D0I3_EN;
 +
@@ -124,7 +103,7 @@ index 8a3744d..a29c3bf 100644
  static int __maybe_unused stmmac_pci_suspend(struct device *dev)
  {
  	struct pci_dev *pdev = to_pci_dev(dev);
-@@ -1024,6 +1111,7 @@ static int __maybe_unused stmmac_pci_suspend(struct device *dev)
+@@ -1039,6 +1120,7 @@ static int __maybe_unused stmmac_pci_suspend(struct device *dev)
  	pci_wake_from_d3(pdev, true);
  	pci_set_power_state(pdev, PCI_D3hot);
  
@@ -132,7 +111,7 @@ index 8a3744d..a29c3bf 100644
  	return 0;
  }
  
-@@ -1032,6 +1120,7 @@ static int __maybe_unused stmmac_pci_resume(struct device *dev)
+@@ -1047,6 +1129,7 @@ static int __maybe_unused stmmac_pci_resume(struct device *dev)
  	struct pci_dev *pdev = to_pci_dev(dev);
  	int ret;
  
@@ -140,18 +119,6 @@ index 8a3744d..a29c3bf 100644
  	pci_restore_state(pdev);
  	pci_set_power_state(pdev, PCI_D0);
  
-diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index 8f08307..d53e419 100644
---- a/include/linux/stmmac.h
-+++ b/include/linux/stmmac.h
-@@ -239,6 +239,7 @@ struct plat_stmmacenet_data {
- 	bool is_pse;
- 	bool ehl_ao_wa;
- 	bool serdes_pse_sgmii_wa;
-+	bool set_doi3;
- 	/* TX and RX PHY latency (ns) */
- 	u64 phy_tx_latency_2500;
- 	u64 phy_tx_latency_1000;
 -- 
-2.7.4
+2.17.1
 

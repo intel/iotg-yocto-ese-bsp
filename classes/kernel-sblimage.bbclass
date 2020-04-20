@@ -19,7 +19,7 @@ do_sblimage[doc] = "Packs kernel commandline, image and initrd for slimboot OSLo
 addtask sblimage after do_install before kernel_do_deploy
 
 DEPENDS += "slimboot-tools-native ${PYTHON_PN}-cryptography-native ${PYTHON_PN}-idna-native"
-do_sblimage[depends] += "${PN}:do_install ${SBLIMAGE_DEPENDS}"
+do_sblimage[depends] += "${PN}:do_install"
 do_package[depends] += "${PN}:do_sblimage"
 
 SBLIMAGE_INITRD_PATH ?= ""
@@ -41,4 +41,12 @@ python(){
         d.setVar('SBLIMAGE_NAME', d.expand('${BASE_SBLIMAGE}-${KERNEL_PACKAGE_NAME}'))
 
     d.setVar(d.expand("FILES_${KERNEL_PACKAGE_NAME}-image-sblimage"), d.expand("/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME}"))
+
+    deps = d.getVar('SBLIMAGE_DEPENDS')
+    if deps:
+        if deps.startswith('mc:'):
+            depflag = 'mcdepends'
+        else:
+            depflag = 'depends'
+        d.appendVarFlag('do_sblimage', depflag, ' ' + deps)
 }

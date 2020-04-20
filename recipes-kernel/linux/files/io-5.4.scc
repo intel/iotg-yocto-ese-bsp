@@ -17,4 +17,5 @@ patch io-5.4/0007-Added-single-shot-output-mode-option-for-TGPIO-pin.patch
 patch io-5.4/0008-ptp-ptp-intel-tgpio-Add-COMPV-GPIO-Mode-for-PSE-TGPI.patch
 patch io-5.4/0009-selftests-ptp-Added-COMPV-GPIO-Input-Mode-for-TGPIO.patch
 patch io-5.4/0010-ptp-intel-tgpio-Reset-pin-configuration-when-disabli.patch
+patch io-5.4/0001-Temporary-ptp-Introduce-PTP_PINDESC_INPUTPOLL-for-In.patch
 

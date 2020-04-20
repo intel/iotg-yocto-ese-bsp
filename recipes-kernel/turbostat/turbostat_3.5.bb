@@ -20,7 +20,7 @@ SRC_URI += "\
             file://COPYING \
             "
 
-DEPENDS = "virtual/kernel"
+DEPENDS = "virtual/kernel libcap"
 
 # This looks in S, so we better make sure there's
 # something in the directory.
