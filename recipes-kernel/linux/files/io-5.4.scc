@@ -18,4 +18,11 @@ patch io-5.4/0008-ptp-ptp-intel-tgpio-Add-COMPV-GPIO-Mode-for-PSE-TGPI.patch
 patch io-5.4/0009-selftests-ptp-Added-COMPV-GPIO-Input-Mode-for-TGPIO.patch
 patch io-5.4/0010-ptp-intel-tgpio-Reset-pin-configuration-when-disabli.patch
 patch io-5.4/0001-Temporary-ptp-Introduce-PTP_PINDESC_INPUTPOLL-for-In.patch
-
+patch io-5.4/0001-ptp-intel-tgpio-Enable-RPM-and-PM-for-PSE-TGPIO.patch
+patch io-5.4/0001-pinctrl-sunrisepoint-Fix-PAD-lock-register-offset-fo.patch
+patch io-5.4/0001-gpio-gpio-ehl-pse-Introduce-the-Elkhart-Lake-Program.patch
+patch io-5.4/0001-pinctrl-elkhartlake-pinctrl-Realign-each-GPIO-group-.patch
+patch io-5.4/0001-mfd-intel-ehl-gpio-Introduce-MFD-framework-to-PSE-GP.patch
+patch io-5.4/0001-counter-intel-qep-Avoid-race-condition-of-reading-QE.patch
+patch io-5.4/0001-spi-spi-dw-pci-Ensure-spi_set_clk-is-called-for-ever.patch
+patch io-5.4/0001-PSE-I2C-support-for-SS-FS-and-FP.patch

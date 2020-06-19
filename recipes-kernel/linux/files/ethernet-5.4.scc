@@ -3,3 +3,16 @@ patch ethernet-5.4/0005-net-stmmac-clean-all-pending-Tx-buffers-during-suspe.pat
 patch ethernet-5.4/0006-net-stmmac-clean-all-pending-XDP-Tx-buffers-during-s.patch
 patch ethernet-5.4/0007-net-stmmac-improve-S3-suspend-and-resume-handling-in.patch
 patch ethernet-5.4/0008-net-stmmac-Update-suspend-resume-flow-when-Network-P.patch
+patch ethernet-5.4/0001-net-networkproxy-enable-wakeup-capability-when-Netwo.patch
+patch ethernet-5.4/0002-net-stmmac-enable-wakeup-capability-only-when-Networ.patch
+patch ethernet-5.4/0003-net-stmmac-change-all-EHL-TGL-ICL-to-auto-detect-phy.patch
+patch ethernet-5.4/0004-net-phy-fix-Marvell-88E2110-PHY-loopback.patch
+patch ethernet-5.4/0005-Revert-net-xsk-REVERTME-workaround-stmmac-AF_XDP-ZC-.patch
+patch ethernet-5.4/0006-net-stmmac-fix-AF_XDP-entry-exit-without-using-stmma.patch
+patch ethernet-5.4/0007-net-phy-mdio_bus-make-mdiobus_scan-capable-for-PHY-t.patch
+patch ethernet-5.4/0008-net-phy-add-Intel-Swanville-GPY-PHY-support.patch
+patch ethernet-5.4/0001-net-stmmac-configure-PSE-Gbe-to-32bit-dma-addressing.patch
+patch ethernet-5.4/0002-net-stmmac-Add-per-queue-TBS-support.patch
+patch ethernet-5.4/0003-net-stmmac-Add-per-queue-TSO-support.patch
+patch ethernet-5.4/0001-net-phy-disable-SGMII-autoneg-for-2.5Gbps.patch
+patch ethernet-5.4/0002-REVERTME-net-phy-WA-for-GPY115-which-need-a-soft-res.patch
