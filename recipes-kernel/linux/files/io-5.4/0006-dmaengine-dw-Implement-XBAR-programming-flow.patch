@@ -1,0 +1,359 @@
+From 93e3a380efc86a5794c19cb62f5c37a04f003aa0 Mon Sep 17 00:00:00 2001
+From: Raymond Tan <raymond.tan@intel.com>
+Date: Fri, 29 May 2020 11:55:03 +0800
+Subject: [PATCH 6/8] dmaengine: dw: Implement XBAR programming flow
+
+This new flow deviates from the existing MID-based DMA driver.
+This change is implemented with latest information from Windows & Zephyr,
+and the much-needed HAS update.
+
+Signed-off-by: Raymond Tan <raymond.tan@intel.com>
+
+Signed-off-by: hkoayx <henry.shueh.tzingx.koay@intel.com>
+---
+ drivers/dma/dmatest.c     |  8 +++++
+ drivers/dma/dw/core.c     | 30 +++++++++++++++--
+ drivers/dma/dw/idma32.c   | 37 +++++++++++++++++----
+ drivers/dma/dw/internal.h | 12 ++++++-
+ drivers/dma/dw/xbar.c     | 85 +++++++++++++++++++++++++++++++++++++++++++++--
+ 5 files changed, 158 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/dma/dmatest.c b/drivers/dma/dmatest.c
+index 364dd34..800536d 100644
+--- a/drivers/dma/dmatest.c
++++ b/drivers/dma/dmatest.c
+@@ -712,6 +712,10 @@ static int dmatest_func(void *data)
+ 
+ 			diff = ktime_sub(ktime_get(), start);
+ 			filltime = ktime_add(filltime, diff);
++
++			for (i = 0; i < len; i++) {
++				pr_info("src[%d]: %x , dst[%d]: %x", i, *((u8 *)src->aligned+i), i, *((u8 *)dst->aligned+i));
++			}
+ 		}
+ 
+ 		um = dmaengine_get_unmap_data(dev->dev, src->cnt + dst->cnt,
+@@ -860,6 +864,10 @@ static int dmatest_func(void *data)
+ 				buf_size, dst->off + len,
+ 				PATTERN_DST, false, is_memset);
+ 
++		for (i = 0; i < len; i++) {
++			pr_info("src[%d]: %x , dst[%d]: %x", i, *((u8 *)src->aligned+i), i, *((u8 *)dst->aligned+i));
++		}
++
+ 		diff = ktime_sub(ktime_get(), start);
+ 		comparetime = ktime_add(comparetime, diff);
+ 
+diff --git a/drivers/dma/dw/core.c b/drivers/dma/dw/core.c
+index 21cb2a5..4223a8b 100644
+--- a/drivers/dma/dw/core.c
++++ b/drivers/dma/dw/core.c
+@@ -41,6 +41,12 @@
+ 	BIT(DMA_SLAVE_BUSWIDTH_2_BYTES)		| \
+ 	BIT(DMA_SLAVE_BUSWIDTH_4_BYTES)
+ 
++#define XBAR_DMA_CTL_CH(x)			(0x1000 + (x) * 4)
++#define XBAR_DMA_SRC_ADDR_FILLIN(x)		(0x1100 + (x) * 4)
++#define XBAR_DMA_DST_ADDR_FILLIN(x)		(0x1200 + (x) * 4)
++#define XBAR_DMA_XBAR_SEL(x)			(0x1300 + (x) * 4)
++#define XBAR_DMA_CHID_CONF			(0x1400)
++
+ /*----------------------------------------------------------------------*/
+ 
+ static struct device *chan2dev(struct dma_chan *chan)
+@@ -118,9 +124,25 @@ static void dwc_initialize(struct dw_dma_chan *dwc)
+ {
+ 	struct dw_dma *dw = to_dw_dma(dwc->chan.device);
+ 
++	/* In PSE DMA, we will go through this flow everytime, thus skipped checking */
++	/*
+ 	if (test_bit(DW_DMA_IS_INITIALIZED, &dwc->flags))
+ 		return;
++	*/
++
++	/* CHLID needed for all the CFG_LO and CFG, if not RAW_ERR will be set */
++	dev_dbg(chan2dev(&dwc->chan), "%s XBAR_DMA_CHID_CONF = %d", __func__, dwc->chan.chan_id);
++	writel(dwc->chan.chan_id, dw->regs + XBAR_DMA_CHID_CONF);
+ 
++	/* Checking various values programmed during xbar_configure() */
++	dev_dbg(chan2dev(&dwc->chan), "%s XBAR_DMA_CTL_CH = 0x%x", __func__, readl(dw->regs + XBAR_DMA_CTL_CH(dwc->chan.chan_id)), XBAR_DMA_CTL_CH(dwc->chan.chan_id));
++	dev_dbg(chan2dev(&dwc->chan), "%s XBAR_DMA_SRC_ADDR_FILLIN= 0x%x", __func__, readl(dw->regs + XBAR_DMA_SRC_ADDR_FILLIN(dwc->chan.chan_id)), XBAR_DMA_SRC_ADDR_FILLIN(dwc->chan.chan_id));
++	dev_dbg(chan2dev(&dwc->chan), "%s XBAR_DMA_DST_ADDR_FILLIN = 0x%x", __func__, readl(dw->regs + XBAR_DMA_DST_ADDR_FILLIN(dwc->chan.chan_id)), XBAR_DMA_DST_ADDR_FILLIN(dwc->chan.chan_id));
++	dev_dbg(chan2dev(&dwc->chan), "%s XBAR_DMA_XBAR_SEL = 0x%x", __func__, readl(dw->regs + XBAR_DMA_XBAR_SEL(dwc->chan.chan_id)), XBAR_DMA_XBAR_SEL(dwc->chan.chan_id));
++
++	/* For TX ( e.g. DRAM to SPI peripheral), CFG_HI.DST_PER will need to be programmed to channel number and CFG_HI.SRC_PER will need to be programmed to HW handshake line number.
++	 * For RX ( e.g. SPI peripheral to DRAM), we need to do the reverse ie, CFG_HI.SRC_PER will need to be programmed to channel number and CFG_HI.DST_PER will be HW handshake line number.
++	 */
+ 	dw->initialize_chan(dwc);
+ 
+ 	/* Enable interrupts */
+@@ -168,7 +190,9 @@ static inline void dwc_do_single_block(struct dw_dma_chan *dwc,
+ 	channel_writel(dwc, SAR, lli_read(desc, sar));
+ 	channel_writel(dwc, DAR, lli_read(desc, dar));
+ 	channel_writel(dwc, CTL_LO, ctllo);
++
+ 	channel_writel(dwc, CTL_HI, lli_read(desc, ctlhi));
++
+ 	channel_set_bit(dw, CH_EN, dwc->mask);
+ 
+ 	/* Move pointer to next descriptor */
+@@ -181,6 +205,7 @@ static void dwc_dostart(struct dw_dma_chan *dwc, struct dw_desc *first)
+ 	struct dw_dma	*dw = to_dw_dma(dwc->chan.device);
+ 	u8		lms = DWC_LLP_LMS(dwc->dws.m_master);
+ 	unsigned long	was_soft_llp;
++	u32 ctllo = 0;
+ 
+ 	/* ASSERT:  channel is idle */
+ 	if (dma_readl(dw, CH_EN) & dwc->mask) {
+@@ -217,6 +242,7 @@ static void dwc_dostart(struct dw_dma_chan *dwc, struct dw_desc *first)
+ 
+ 	channel_writel(dwc, LLP, first->txd.phys | lms);
+ 	channel_writel(dwc, CTL_LO, DWC_CTLL_LLP_D_EN | DWC_CTLL_LLP_S_EN);
++
+ 	channel_writel(dwc, CTL_HI, 0);
+ 	channel_set_bit(dw, CH_EN, dwc->mask);
+ }
+@@ -479,8 +505,6 @@ static void dw_dma_tasklet(unsigned long data)
+ 	status_xfer = dma_readl(dw, RAW.XFER);
+ 	status_err = dma_readl(dw, RAW.ERROR);
+ 
+-	dev_vdbg(dw->dma.dev, "%s: status_err=%x\n", __func__, status_err);
+-
+ 	for (i = 0; i < dw->dma.chancnt; i++) {
+ 		dwc = &dw->chan[i];
+ 		if (test_bit(DW_DMA_IS_CYCLIC, &dwc->flags))
+@@ -506,7 +530,6 @@ static irqreturn_t dw_dma_interrupt(int irq, void *dev_id)
+ 		return IRQ_NONE;
+ 
+ 	status = dma_readl(dw, STATUS_INT);
+-	dev_vdbg(dw->dma.dev, "%s: status=0x%x\n", __func__, status);
+ 
+ 	/* Check if we have any interrupt from the DMAC */
+ 	if (!status)
+@@ -1186,6 +1209,7 @@ int do_dma_probe(struct dw_dma_chip *chip)
+ 		}
+ 	}
+ 
++
+ 	/* Clear all interrupts on all channels. */
+ 	dma_writel(dw, CLEAR.XFER, dw->all_chan_mask);
+ 	dma_writel(dw, CLEAR.BLOCK, dw->all_chan_mask);
+diff --git a/drivers/dma/dw/idma32.c b/drivers/dma/dw/idma32.c
+index f006573..c2c0058 100644
+--- a/drivers/dma/dw/idma32.c
++++ b/drivers/dma/dw/idma32.c
+@@ -13,17 +13,40 @@ static void idma32_initialize_chan(struct dw_dma_chan *dwc)
+ {
+ 	u32 cfghi = 0;
+ 	u32 cfglo = 0;
++	u32 rx = 0;
+ 
+ 	/* Set default burst alignment */
+ 	cfglo |= IDMA32C_CFGL_DST_BURST_ALIGN | IDMA32C_CFGL_SRC_BURST_ALIGN;
+ 
+-	/* Low 4 bits of the request lines */
+-	cfghi |= IDMA32C_CFGH_DST_PER(dwc->dws.dst_id & 0xf);
+-	cfghi |= IDMA32C_CFGH_SRC_PER(dwc->dws.src_id & 0xf);
+-
+-	/* Request line extension (2 bits) */
+-	cfghi |= IDMA32C_CFGH_DST_PER_EXT(dwc->dws.dst_id >> 4 & 0x3);
+-	cfghi |= IDMA32C_CFGH_SRC_PER_EXT(dwc->dws.src_id >> 4 & 0x3);
++	if (DMA_MEM_TO_DEV == dwc->direction) {
++		/* TX mode, src= handshake, dst = channel */
++		/* Low 4 bits of the request lines */
++		cfghi |= IDMA32C_CFGH_DST_PER(dwc->chan.chan_id & 0xf);
++		cfghi |= IDMA32C_CFGH_SRC_PER(dwc->dws.src_id & 0xf);
++
++		/* Request line extension (2 bits) */
++		cfghi |= IDMA32C_CFGH_DST_PER_EXT(dwc->chan.chan_id >> 4 & 0x3);
++		cfghi |= IDMA32C_CFGH_SRC_PER_EXT(dwc->dws.src_id >> 4 & 0x3);
++
++	} else if (DMA_DEV_TO_MEM == dwc->direction) {
++		/* RX mode, src= channel, dst = handshake*/
++		/* Low 4 bits of the request lines */
++		cfghi |= IDMA32C_CFGH_DST_PER(dwc->dws.dst_id & 0xf);
++		cfghi |= IDMA32C_CFGH_SRC_PER(dwc->chan.chan_id & 0xf);
++
++		/* Request line extension (2 bits) */
++		cfghi |= IDMA32C_CFGH_DST_PER_EXT(dwc->dws.dst_id >> 4 & 0x3);
++		cfghi |= IDMA32C_CFGH_SRC_PER_EXT(dwc->chan.chan_id >> 4 & 0x3);
++	} else {
++		/* Others mode, both using channel as SRC and DST */
++		/* Low 4 bits of the request lines */
++		cfghi |= IDMA32C_CFGH_DST_PER(0x0 & 0xf);
++		cfghi |= IDMA32C_CFGH_SRC_PER(0x0 & 0xf);
++
++		/* Request line extension (2 bits) */
++		cfghi |= IDMA32C_CFGH_DST_PER_EXT(0x0 >> 4 & 0x3);
++		cfghi |= IDMA32C_CFGH_SRC_PER_EXT(0x0 >> 4 & 0x3);
++	}
+ 
+ 	channel_writel(dwc, CFG_LO, cfglo);
+ 	channel_writel(dwc, CFG_HI, cfghi);
+diff --git a/drivers/dma/dw/internal.h b/drivers/dma/dw/internal.h
+index 1a98a85..80c6b3c 100644
+--- a/drivers/dma/dw/internal.h
++++ b/drivers/dma/dw/internal.h
+@@ -71,6 +71,16 @@ static const struct dw_dma_platform_data idma32_pdata = {
+ 	.multi_block = {1, 1, 1, 1, 1, 1, 1, 1},
+ };
+ 
++static const struct dw_dma_platform_data idma32_pdata_xbar = {
++	.nr_channels = 8,
++	.chan_allocation_order = CHAN_ALLOCATION_ASCENDING,
++	.chan_priority = CHAN_PRIORITY_ASCENDING,
++	.block_size = 131071,
++	.nr_masters = 1,
++	.data_width = {4},
++	.multi_block = {0, 0, 0, 0, 0, 0, 0, 0},
++};
++
+ static __maybe_unused const struct dw_dma_chip_pdata idma32_chip_pdata = {
+ 	.pdata = &idma32_pdata,
+ 	.probe = idma32_dma_probe,
+@@ -78,7 +88,7 @@ static __maybe_unused const struct dw_dma_chip_pdata idma32_chip_pdata = {
+ };
+ 
+ static __maybe_unused const struct dw_dma_chip_pdata idma32_xbar_pdata = {
+-	.pdata = &idma32_pdata,
++	.pdata = &idma32_pdata_xbar,
+ 	.probe = idma32_xbar_probe,
+ 	.remove = idma32_xbar_remove,
+ };
+diff --git a/drivers/dma/dw/xbar.c b/drivers/dma/dw/xbar.c
+index b7f2405..57a8375 100644
+--- a/drivers/dma/dw/xbar.c
++++ b/drivers/dma/dw/xbar.c
+@@ -14,6 +14,7 @@
+ #define DMA_SRC_ADDR_FILLIN(x)		(0x1100 + (x) * 4)
+ #define DMA_DST_ADDR_FILLIN(x)		(0x1200 + (x) * 4)
+ #define DMA_XBAR_SEL(x)			(0x1300 + (x) * 4)
++#define DMA_CHID_CONF			(0x1400)
+ 
+ #define CTL_CH_TRANSFER_MODE_MASK	GENMASK(1, 0)
+ #define CTL_CH_TRANSFER_MODE_S2S	0
+@@ -29,6 +30,63 @@
+ #define XBAR_SEL_RX_TX_BIT		BIT(16)
+ #define XBAR_SEL_RX_TX_SHIFT		16
+ 
++struct dma_handshake_map_t {
++	u32 request_line;
++	u32 devfunc;
++};
++
++/* Hardcoded mapping table with fixed DEVFUNC values from EDS & BIOS */
++static const struct dma_handshake_map_t dma_hs_maps[] = {
++	/* PSE UART 0 - 5*/
++	{0x40, 0x88},
++	{0x41, 0x88},
++	{0x42, 0x89},
++	{0x43, 0x89},
++	{0x44, 0x8A},
++	{0x45, 0x8A},
++	{0x46, 0x8B},
++	{0x47, 0x8B},
++	{0x48, 0x8C},
++	{0x49, 0x8C},
++	{0x4A, 0x8D},
++	{0x4B, 0x8D},
++	/* PSE I2S 0 - 1*/
++	{0x4C, 0x8E},
++	{0x4D, 0x8E},
++	{0x4E, 0x8F},
++	{0x4F, 0x8F},
++	/* PSE ADC, only RX is requested by IO driver*/
++	{0x80, 0xEF},
++	{0x81, 0xEF},
++	/* PSE I2C 0 - 7*/
++	{0x82, 0xD8},
++	{0x83, 0xD8},
++	{0x84, 0xD9},
++	{0x85, 0xD9},
++	{0x86, 0xDA},
++	{0x87, 0xDA},
++	{0x88, 0xDB},
++	{0x89, 0xDB},
++	{0x8A, 0xDC},
++	{0x8B, 0xDC},
++	{0x8C, 0xDD},
++	{0x8D, 0xDD},
++	{0x8E, 0xDE},
++	{0x8F, 0xDE},
++	{0x90, 0xC0},
++	{0x91, 0xC0},
++	/* PSE SPI 0 - 3*/
++	{0x92, 0x98},
++	{0x93, 0x98},
++	{0x94, 0x99},
++	{0x95, 0x99},
++	{0x96, 0x9A},
++	{0x97, 0x9A},
++	{0x98, 0x9B},
++	{0x99, 0x9B},
++	{},
++};
++
+ static bool xbar_filter(struct dma_chan *chan, void *param)
+ {
+ 	struct acpi_dma_spec *dma_spec = param;
+@@ -41,7 +99,20 @@ static bool xbar_filter(struct dma_chan *chan, void *param)
+ 	return dw_dma_filter(chan, &slave);
+ }
+ 
+-static void xbar_configure(struct acpi_dma_spec *dma_spec, struct dma_chan *chan)
++static u32 xbar_get_devfunc(const int slave_id, const int base_request_line)
++{
++	unsigned int abs_req_line = base_request_line + slave_id;
++	const struct dma_handshake_map_t *entry;
++	int nr_map = sizeof(dma_hs_maps) / sizeof(struct dma_handshake_map_t);
++
++	for (entry = dma_hs_maps; entry->request_line; entry++)
++		if (entry->request_line == abs_req_line)
++			return entry->devfunc;
++
++	return 0;
++}
++
++static void xbar_configure(struct acpi_dma_spec *dma_spec, struct dma_chan *chan, struct acpi_dma *adma)
+ {
+ 	struct dw_dma_chip_pdata *data = dev_get_drvdata(dma_spec->dev);
+ 	struct pci_dev *pdev = to_pci_dev(dma_spec->consumer);
+@@ -50,6 +121,11 @@ static void xbar_configure(struct acpi_dma_spec *dma_spec, struct dma_chan *chan
+ 	size_t d = dma_spec->index;
+ 	int c = chan->chan_id;
+ 	u32 value;
++	u32 fixed_devfunc;
++
++	/* Configure CHLID before XBAR MISC Reg Programming */
++	dev_dbg(dma_spec->dev, "%s DMA_CHID_CONF %d\n", __func__, c);
++	writel(c, x + DMA_CHID_CONF);
+ 
+ 	/* Configure upper part of the address */
+ 	if (d) {
+@@ -60,10 +136,13 @@ static void xbar_configure(struct acpi_dma_spec *dma_spec, struct dma_chan *chan
+ 		writel(upper_32_bits(base), x + DMA_DST_ADDR_FILLIN(c));
+ 	}
+ 
++	fixed_devfunc = xbar_get_devfunc(dma_spec->slave_id, adma->base_request_line);
++
+ 	/* Configure crossbar selection */
+ 	value = readl(x + DMA_XBAR_SEL(c));
+ 	value &= XBAR_SEL_DEVID_MASK | XBAR_SEL_RX_TX_BIT;
+-	value |= pdev->devfn | (d << XBAR_SEL_RX_TX_SHIFT);
++	value |= fixed_devfunc;
++	value |= d ? (0 << XBAR_SEL_RX_TX_SHIFT) : (1 << XBAR_SEL_RX_TX_SHIFT);
+ 	writel(value, x + DMA_XBAR_SEL(c));
+ 
+ 	/* Configure channel attributes */
+@@ -88,7 +167,7 @@ static struct dma_chan *xbar_xlate(struct acpi_dma_spec *dma_spec, struct acpi_d
+ 	if (!chan)
+ 		return NULL;
+ 
+-	xbar_configure(dma_spec, chan);
++	xbar_configure(dma_spec, chan, adma);
+ 	return chan;
+ }
+ 
+-- 
+2.7.4
+

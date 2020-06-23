@@ -1,0 +1,98 @@
+From 49829eb2cd0b9295dff7c500307dc68fdd42037b Mon Sep 17 00:00:00 2001
+From: Raymond Tan <raymond.tan@intel.com>
+Date: Fri, 29 May 2020 11:56:23 +0800
+Subject: [PATCH 7/8] spi: dw: Update the DMA channel request flow according to
+ FixedDMA table
+
+Minor changes to the PSE SPI IO driver to follow the aligned request line
+allocation from the forum involving BIOS, Windows and Linux.
+
+Signed-off-by: Raymond Tan <raymond.tan@intel.com>
+---
+ drivers/spi/spi-dw-mid.c | 41 +++++++++++++++++++++++------------------
+ 1 file changed, 23 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/spi/spi-dw-mid.c b/drivers/spi/spi-dw-mid.c
+index b3cca64..b3b2e5e 100644
+--- a/drivers/spi/spi-dw-mid.c
++++ b/drivers/spi/spi-dw-mid.c
+@@ -21,6 +21,8 @@
+ #define RX_BUSY		0
+ #define TX_BUSY		1
+ 
++#define DMA_MODE_THRESHOLD	5
++
+ static struct dw_dma_slave mid_dma_tx = { .dst_id = 1 };
+ static struct dw_dma_slave mid_dma_rx = { .src_id = 0 };
+ 
+@@ -84,20 +86,21 @@ static int mid_spi_dma_init_generic(struct dw_spi *dws)
+ 	dma_cap_zero(mask);
+ 	dma_cap_set(DMA_SLAVE, mask);
+ 
+-	dws->rxchan = dma_request_slave_channel_compat(mask, NULL, NULL,
+-						       dev, "rx");
+-	if (dws->rxchan)
+-		return -ENODEV;
+-	dws->master->dma_rx = dws->rxchan;
+-
+ 	dws->txchan = dma_request_slave_channel_compat(mask, NULL, NULL,
+ 						       dev, "tx");
+-	if (dws->txchan) {
+-		dma_release_channel(dws->rxchan);
++	if (!dws->txchan) {
+ 		return -ENODEV;
+ 	}
+ 	dws->master->dma_tx = dws->txchan;
+ 
++	dws->rxchan = dma_request_slave_channel_compat(mask, NULL, NULL,
++						       dev, "rx");
++	if (!dws->rxchan) {
++		dma_release_channel(dws->txchan);
++		return -ENODEV;
++	}
++	dws->master->dma_rx = dws->rxchan;
++
+ 	dws->dma_inited = 1;
+ 	return 0;
+ }
+@@ -146,7 +149,7 @@ static bool mid_spi_can_dma(struct spi_controller *master,
+ 	if (!dws->dma_inited)
+ 		return false;
+ 
+-	return xfer->len > dws->fifo_len;
++	return xfer->len > DMA_MODE_THRESHOLD;
+ }
+ 
+ static enum dma_slave_buswidth convert_dma_width(u32 dma_width) {
+@@ -335,17 +338,19 @@ int dw_spi_mid_init(struct dw_spi *dws)
+ 	void __iomem *clk_reg;
+ 	u32 clk_cdiv;
+ 
+-	clk_reg = ioremap_nocache(MRST_CLK_SPI_REG, 16);
+-	if (!clk_reg)
+-		return -ENOMEM;
++	if (!dws->max_freq) {
++		clk_reg = ioremap_nocache(MRST_CLK_SPI_REG, 16);
++		if (!clk_reg)
++			return -ENOMEM;
+ 
+-	/* Get SPI controller operating freq info */
+-	clk_cdiv = readl(clk_reg + dws->bus_num * sizeof(u32));
+-	clk_cdiv &= CLK_SPI_CDIV_MASK;
+-	clk_cdiv >>= CLK_SPI_CDIV_OFFSET;
+-	dws->max_freq = MRST_SPI_CLK_BASE / (clk_cdiv + 1);
++		/* Get SPI controller operating freq info */
++		clk_cdiv = readl(clk_reg + dws->bus_num * sizeof(u32));
++		clk_cdiv &= CLK_SPI_CDIV_MASK;
++		clk_cdiv >>= CLK_SPI_CDIV_OFFSET;
++		dws->max_freq = MRST_SPI_CLK_BASE / (clk_cdiv + 1);
+ 
+-	iounmap(clk_reg);
++		iounmap(clk_reg);
++	}
+ 
+ #ifdef CONFIG_SPI_DW_MID_DMA
+ 	dws->dma_tx = &mid_dma_tx;
+-- 
+2.7.4
+

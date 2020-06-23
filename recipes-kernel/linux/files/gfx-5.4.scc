@@ -1,3 +1,3 @@
 patch gfx-5.4/0001-drm-i915-do-not-set-bits-1-11-in-gen12-ptes.patch
 patch gfx-5.4/0001-drm-i915-Fix-display-audio-issue.patch
-patch gfx-5.4/0001-drm-i915-icp-Add-Wa_14010685332.patch
+patch gfx-5.4/0001-i915-EHL-specific-Wa_14010685332.patch
