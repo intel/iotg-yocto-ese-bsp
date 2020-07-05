@@ -37,3 +37,8 @@ patch io-5.4/0006-dmaengine-dw-Implement-XBAR-programming-flow.patch
 patch io-5.4/0007-spi-dw-Update-the-DMA-channel-request-flow-according.patch
 patch io-5.4/0008-serial-8250_lpss-WIP-Enable-PSE-UART-with-DMA-capabi.patch
 
+patch io-5.4/0001-iio-intel-adc-Use-completion-object-to-read-from-FIF.patch
+patch io-5.4/0002-iio-intel-adc-ADC-sample-data-size-is-16bit-only.patch
+patch io-5.4/0003-WIP-iio-intel-adc-Implement-IIO-events-value-and-con.patch
+
+patch io-5.4/0001-WA-for-GUNIT-IOMMU-silicon-bug.patch
