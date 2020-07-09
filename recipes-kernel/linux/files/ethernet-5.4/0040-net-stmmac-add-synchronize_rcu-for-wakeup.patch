@@ -1,0 +1,30 @@
+From 7453577844d44d221f361591d415f824f462d301 Mon Sep 17 00:00:00 2001
+From: Ong Boon Leong <boon.leong.ong@intel.com>
+Date: Wed, 27 May 2020 11:27:18 +0800
+Subject: [PATCH 40/54] net: stmmac: add synchronize_rcu() for wakeup
+
+Wait until ndo_xsk_wakeup completes before re-enabling the queue_pairs.
+
+Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index d5dd00010369..7b02d87b8eb4 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -5963,6 +5963,10 @@ static int stmmac_xdp_setup(struct stmmac_priv *priv,
+ 	old_prog = xchg(&priv->xdp_prog, prog);
+ 
+ 	if (need_reset) {
++		if (!prog)
++			/* Wait until ndo_xsk_wakeup completes. */
++			synchronize_rcu();
++
+ 		err = stmmac_all_queue_pairs_enable(priv);
+ 		if (err)
+ 			return err;
+-- 
+2.17.0
+

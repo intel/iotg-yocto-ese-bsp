@@ -1,0 +1,38 @@
+From 7f2c8ff340c3a14ae063043ec83e552f003aa763 Mon Sep 17 00:00:00 2001
+From: Ong Boon Leong <boon.leong.ong@intel.com>
+Date: Thu, 4 Jun 2020 01:29:23 +0800
+Subject: [PATCH 73/77] net: stmmac: add MTL RXFIFO Overflow handling to MAC
+ interrupt
+
+Handle the MTL RXFIFO Overflow within stmmac_common_interrupt.
+
+Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 616ad2ed1476..17d1db61089a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -5237,6 +5237,7 @@ static void stmmac_common_interrupt(struct stmmac_priv *priv)
+ 	u32 rx_cnt = priv->plat->rx_queues_to_use;
+ 	u32 tx_cnt = priv->plat->tx_queues_to_use;
+ 	u32 queues_count;
++	u32 queue;
+ 	bool xmac;
+ 
+ 	xmac = priv->plat->has_gmac4 || priv->plat->has_xgmac;
+@@ -5263,6 +5264,9 @@ static void stmmac_common_interrupt(struct stmmac_priv *priv)
+ 				priv->tx_path_in_lpi_mode = false;
+ 		}
+ 
++		for (queue = 0; queue < queues_count; queue++)
++			stmmac_host_mtl_irq_status(priv, priv->hw, queue);
++
+ 		/* PCS link status */
+ 		if (priv->hw->pcs) {
+ 			if (priv->xstats.pcs_link)
+-- 
+2.17.0
+
