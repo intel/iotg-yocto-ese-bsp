@@ -26,7 +26,7 @@ do_sblimage_sha256[cleandirs] += "${WORKDIR}/slimboot_sha256"
 
 SBLIMAGE_INITRD_PATH ?= ""
 SBLIMAGE_DEPENDS ?= ""
-BASE_SBLIMAGE_sha256 = "sbl_os_2k.bin"
+BASE_SBLIMAGE_sha256 = "sbl_os_2k"
 SBLIMAGE_NAME_sha256 = "${BASE_SBLIMAGE}"
 
 python(){

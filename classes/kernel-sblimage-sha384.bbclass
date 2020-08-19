@@ -26,7 +26,7 @@ do_sblimage_sha384[cleandirs] += "${WORKDIR}/slimboot_sha384"
 
 SBLIMAGE_INITRD_PATH ?= ""
 SBLIMAGE_DEPENDS ?= ""
-BASE_SBLIMAGE_sha384 = "sbl_os_3k.bin"
+BASE_SBLIMAGE_sha384 = "sbl_os_3k"
 SBLIMAGE_NAME_sha384 = "${BASE_SBLIMAGE}"
 
 python(){

@@ -1,0 +1,30 @@
+From 9a5aa287f4b58928f68421a28d8a188e28fc1461 Mon Sep 17 00:00:00 2001
+From: Vinod Koul <vkoul@kernel.org>
+Date: Tue, 24 Dec 2019 10:26:14 +0530
+Subject: [PATCH 05/27] dmaengine: print more meaningful error message
+
+error log for dma_channel_table_init() failure pointed a mere
+"initialization failure", which is not very helpful message, so print
+additional details like function name and error code.
+
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+---
+ drivers/dma/dmaengine.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+index 0505ea5..4ac7745 100644
+--- a/drivers/dma/dmaengine.c
++++ b/drivers/dma/dmaengine.c
+@@ -206,7 +206,7 @@ static int __init dma_channel_table_init(void)
+ 	}
+ 
+ 	if (err) {
+-		pr_err("initialization failure\n");
++		pr_err("dmaengine dma_channel_table_init failure: %d\n", err);
+ 		for_each_dma_cap_mask(cap, dma_cap_mask_all)
+ 			free_percpu(channel_table[cap]);
+ 	}
+-- 
+2.7.4
+

@@ -5,7 +5,7 @@ LICENSE = "GPLv2"
 
 REQUIRED_DISTRO_FEATURES = "wifi"
 
-LIC_FILES_CHKSUM = "file://${S}/COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
+LIC_FILES_CHKSUM = "file://${S}/COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
 inherit module
 
@@ -14,19 +14,16 @@ SRC_URI = "git://github.com/intel/backport-iwlwifi.git;nobranch=1;protocol=https
            file://iwlwifi.conf \
           "
 
-PV = "52-54+git${SRCPV}"
-SRCREV = "7b117a3692752c32821f4ffc921685127a6cd89a"
+PV = "54-58+git${SRCPV}"
+SRCREV = "56592ade52343f274a9b3b9be54cab1c70c2fe90"
 
 S = "${WORKDIR}/git/iwlwifi-stack-dev"
 
-EXTRA_OEMAKE = "defconfig-iwlwifi-public INSTALL_MOD_PATH=${D} KLIB_BUILD=${KBUILD_OUTPUT}"
-
-do_compile_prepend() {
-	oe_runmake defconfig-iwlwifi-public
-	sed -i 's/CPTCFG_IWLMVM_VENDOR_CMDS=y/# CPTCFG_IWLMVM_VENDOR_CMDS is not set/' ${S}/.config
-}
+EXTRA_OEMAKE = "INSTALL_MOD_PATH=${D} KLIB_BUILD=${KBUILD_OUTPUT}"
 
 MODULES_INSTALL_TARGET="install"
+
+DEPENDS_append = " flex-native bison-native"
 
 do_install_append() {
 	## install configs and service scripts
@@ -38,4 +35,10 @@ RDEPENDS_${PN} = "linux-firmware-iwlwifi"
 ### This breaks dependency resolution on external kernel modules like libarc4
 # where instead of kernel-modules-libarc4, dnf searches for backport-iwlwifikernel-modules-libarc4
 #KERNEL_MODULE_PACKAGE_PREFIX = "backport-iwlwifi"
-CLEANBROKEN = "1"
+
+# CLEANBROKEN doesn't quite work since it needs clean ups, yet make clean is actually broken
+do_configure_append(){
+	git checkout compat kconf
+	oe_runmake defconfig-iwlwifi-public
+	sed -i 's/CPTCFG_IWLMVM_VENDOR_CMDS=y/# CPTCFG_IWLMVM_VENDOR_CMDS is not set/' ${S}/.config
+}

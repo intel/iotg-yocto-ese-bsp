@@ -27,18 +27,46 @@ patch io-5.4/0001-spi-spi-dw-pci-Ensure-spi_set_clk-is-called-for-ever.patch
 patch io-5.4/0001-PSE-I2C-support-for-SS-FS-and-FP.patch
 patch io-5.4/0001-serial-8250-dwlib-Fix-TX-RX-ADDR-setting-in-9-bit-mo.patch
 patch io-5.4/0001-serial-8250-Enable-RS485-Hardware-Full-Duplex.patch
+patch io-5.4/0001-usb-dwc3-Allow-Elkhart-Lake-to-utilize-DSM-method-fo.patch
 
-patch io-5.4/0001-dmaengine-acpi-Move-index-to-struct-acpi_dma_spec.patch
-patch io-5.4/0002-dmaengine-acpi-Provide-consumer-device-to-acpi_dma_x.patch
-patch io-5.4/0003-dmaengine-dw-Implement-DMA-crossbar-support.patch
-patch io-5.4/0004-dmaengine-dw-Switch-Intel-Elkhart-Lake-to-use-DMA-cr.patch
-patch io-5.4/0005-spi-dw-pci-WIP.-Add-Elkhart-Lake-PSE-DMA-support.patch
-patch io-5.4/0006-dmaengine-dw-Implement-XBAR-programming-flow.patch
-patch io-5.4/0007-spi-dw-Update-the-DMA-channel-request-flow-according.patch
-patch io-5.4/0008-serial-8250_lpss-WIP-Enable-PSE-UART-with-DMA-capabi.patch
+patch io-5.4/0001-dmaengine-Call-module_put-after-device_free_chan_res.patch
+patch io-5.4/0002-dmaengine-Move-dma_channel_rebalance-infrastructure-.patch
+patch io-5.4/0003-dmaengine-Add-reference-counting-to-dma_device-struc.patch
+patch io-5.4/0004-dmaengine-move-module_-dma_device_put-after-route-fr.patch
+patch io-5.4/0005-dmaengine-print-more-meaningful-error-message.patch
+patch io-5.4/0006-dmaengine-doc-Add-sections-for-per-descriptor-metada.patch
+patch io-5.4/0007-dmaengine-Add-metadata_ops-for-dma_async_tx_descript.patch
+patch io-5.4/0008-dmaengine-Add-support-for-reporting-DMA-cached-data-.patch
+patch io-5.4/0009-dmaengine-Add-helper-function-to-convert-direction-v.patch
+patch io-5.4/0010-dmaengine-Remove-dma_device_satisfies_mask-wrapper.patch
+patch io-5.4/0011-dmaengine-Remove-dma_request_slave_channel_compat-wr.patch
+patch io-5.4/0012-dmaengine-Move-dma_get_-any_-slave_channel-to-privat.patch
+patch io-5.4/0013-dmaengine-break-out-channel-registration.patch
+patch io-5.4/0014-dmaengine-add-support-to-dynamic-register-unregister.patch
+patch io-5.4/0015-dmaengine-Create-symlinks-between-DMA-channels-and-s.patch
+patch io-5.4/0016-dmaengine-doc-Properly-indent-metadata-title.patch
+patch io-5.4/0017-dmaengine-Fix-return-value-for-dma_request_chan-in-c.patch
+patch io-5.4/0018-dmaengine-fix-null-ptr-check-for-__dma_async_device_.patch
+patch io-5.4/0019-dmaengine-Cleanups-for-the-slave-channel-symlink-sup.patch
+patch io-5.4/0020-spi-dw-Move-interrupt.h-to-spi-dw.h-who-is-user-of-i.patch
+patch io-5.4/0021-spi-dw-Downgrade-interrupt.h-to-irqreturn.h-where-ap.patch
+patch io-5.4/0022-spi-dw-Move-few-headers-under-ifdef-CONFIG_SPI_DW_MI.patch
+patch io-5.4/0023-spi-dw-Add-mfld-suffix-to-Intel-Medfield-related-rou.patch
+patch io-5.4/0024-spi-dw-Propagate-struct-device-pointer-to-dma_init-c.patch
+patch io-5.4/0026-spi-dw-Add-Elkhart-Lake-PSE-DMA-support.patch
+patch io-5.4/0027-serial-8250_lpss-Enable-Elkhart-Lake-PSE-UART-with-D.patch
 
 patch io-5.4/0001-iio-intel-adc-Use-completion-object-to-read-from-FIF.patch
 patch io-5.4/0002-iio-intel-adc-ADC-sample-data-size-is-16bit-only.patch
-patch io-5.4/0003-WIP-iio-intel-adc-Implement-IIO-events-value-and-con.patch
+patch io-5.4/0001-iio-intel-adc-Implement-IIO-events-for-thresholding-.patch
+patch io-5.4/0002-iio-intel-adc-Enable-LOOP_MODE-with-triggered-buffer.patch
+patch io-5.4/0003-iio-intel-adc-Enable-PSE-DMA-as-flow-controller.patch
 
-patch io-5.4/0001-WA-for-GUNIT-IOMMU-silicon-bug.patch
+patch io-5.4/0001-Calling-power-management-calls-without-entering-crit.patch
+
+patch io-5.4/0001-serial-8250-dwlib-9-bit-data-transfer-mode-negative-.patch
+
+patch io-5.4/0001-iommu-vt-d-Skip-TE-disabling-on-quirky-gfx-dedicated.patch
+
+patch io-5.4/0001-i2c-busses-Support-for-High-Speed-mode.patch
+patch io-5.4/0001-Hack-spi-PSE-DMA-with-Vtd.patch

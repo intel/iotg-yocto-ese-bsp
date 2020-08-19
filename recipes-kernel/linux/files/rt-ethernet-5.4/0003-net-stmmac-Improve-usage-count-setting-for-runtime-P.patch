@@ -1,0 +1,38 @@
+From 23f469cc91d389fb2c8004028eb70c2fdbac4102 Mon Sep 17 00:00:00 2001
+From: "Song, Yoong Siang" <yoong.siang.song@intel.com>
+Date: Sat, 8 Aug 2020 01:15:36 +0800
+Subject: [PATCH 3/7] net: stmmac: Improve usage count setting for runtime PM
+
+Improve the runtime PM usage count setting by using atomic_set()
+instead of while loop.
+
+Signed-off-by: Song, Yoong Siang <yoong.siang.song@intel.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index d6c43b8..90b8286 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -6928,13 +6928,10 @@ int stmmac_dvr_probe(struct device *device,
+ 	/* To support runtime PM, we need to make sure usage_count is equal to 0
+ 	 * when runtime_auto flag is set. Otherwise, it should be equal to 1.
+ 	 */
+-	if (priv->device->power.runtime_auto) {
+-		while (atomic_read(&priv->device->power.usage_count) > 0)
+-			pm_runtime_put_noidle(device);
+-	} else {
+-		while (atomic_read(&priv->device->power.usage_count) > 1)
+-			pm_runtime_put_noidle(device);
+-	}
++	if (priv->device->power.runtime_auto)
++		atomic_set(&priv->device->power.usage_count, 0);
++	else
++		atomic_set(&priv->device->power.usage_count, 1);
+ #endif
+ 
+ 	return ret;
+-- 
+2.7.4
+

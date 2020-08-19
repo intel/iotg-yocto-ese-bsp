@@ -17,4 +17,7 @@ SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
 SRC_URI_append = " file://resctrl-5.4.scc"
 
 # Ethernet patches for 5.4
-SRC_URI_append = " file://ethernet-5.4rt.scc"
+SRC_URI_append = " file://rt-ethernet-5.4.scc"
+
+# io patches for 5.4
+SRC_URI_append = " file://rt-io-5.4.scc"
