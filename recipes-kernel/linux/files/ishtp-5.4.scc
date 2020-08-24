@@ -6,3 +6,4 @@ patch ishtp-5.4/0001-hid-intel-ish-hid-ipc-fix-Sx-resume-issue.patch
 patch ishtp-5.4/0001-hid-change-default-name-to-pseFw.bin.patch
 patch ishtp-5.4/0002-hid-intel-ish-hid-ishtp-enable-fw-to-host-dma.patch
 patch ishtp-5.4/0001-hid-intel-ish-hid-ipc-enable-PME-wake-for-OOB-use-ca.patch
+patch ishtp-5.4/0004-Add-PM-calls-to-prevent-eclite-events.patch
