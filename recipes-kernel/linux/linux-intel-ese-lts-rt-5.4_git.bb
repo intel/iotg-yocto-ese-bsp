@@ -1,8 +1,7 @@
-KERNEL_SRC_URI ?= "git://github.com/github.com/intel/linux-intel-lts.git;protocol=https;nobranch=1;name=machine"
+KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/preempt-rt;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
-# tip of refs/heads/preempt-rt
-SRCREV_machine ?= "b7a2b74892fe1341ddb5940104a1a4d4f8571be2"
-LINUX_VERSION ?= "5.4.3"
+SRCREV_machine ?= "6fa41e866e0be2824b0f5efb593f8635ee2a3bde"
+LINUX_VERSION ?= "5.4"
 LINUX_KERNEL_TYPE = "preempt-rt"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
@@ -15,3 +14,12 @@ SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
 
 # resctrl patches for 5.4
 SRC_URI_append = " file://resctrl-5.4.scc"
+
+# Programmable Software Engine
+SRC_URI_append = " file://ishtp-5.4.scc"
+
+# Ethernet patches for 5.4
+SRC_URI_append = " file://rt-ethernet-5.4.scc"
+
+# io patches for 5.4
+SRC_URI_append = " file://rt-io-5.4.scc"

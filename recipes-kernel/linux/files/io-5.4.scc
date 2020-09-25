@@ -19,10 +19,31 @@ patch io-5.4/0009-selftests-ptp-Added-COMPV-GPIO-Input-Mode-for-TGPIO.patch
 patch io-5.4/0010-ptp-intel-tgpio-Reset-pin-configuration-when-disabli.patch
 patch io-5.4/0001-Temporary-ptp-Introduce-PTP_PINDESC_INPUTPOLL-for-In.patch
 patch io-5.4/0001-ptp-intel-tgpio-Enable-RPM-and-PM-for-PSE-TGPIO.patch
-patch io-5.4/0001-pinctrl-sunrisepoint-Fix-PAD-lock-register-offset-fo.patch
 patch io-5.4/0001-gpio-gpio-ehl-pse-Introduce-the-Elkhart-Lake-Program.patch
 patch io-5.4/0001-pinctrl-elkhartlake-pinctrl-Realign-each-GPIO-group-.patch
 patch io-5.4/0001-mfd-intel-ehl-gpio-Introduce-MFD-framework-to-PSE-GP.patch
 patch io-5.4/0001-counter-intel-qep-Avoid-race-condition-of-reading-QE.patch
 patch io-5.4/0001-spi-spi-dw-pci-Ensure-spi_set_clk-is-called-for-ever.patch
 patch io-5.4/0001-PSE-I2C-support-for-SS-FS-and-FP.patch
+patch io-5.4/0001-serial-8250-dwlib-Fix-TX-RX-ADDR-setting-in-9-bit-mo.patch
+patch io-5.4/0001-serial-8250-Enable-RS485-Hardware-Full-Duplex.patch
+patch io-5.4/0001-usb-dwc3-Allow-Elkhart-Lake-to-utilize-DSM-method-fo.patch
+
+patch io-5.4/0026-spi-dw-Add-Elkhart-Lake-PSE-DMA-support.patch
+patch io-5.4/0027-serial-8250_lpss-Enable-Elkhart-Lake-PSE-UART-with-D.patch
+
+patch io-5.4/0001-iio-intel-adc-Use-completion-object-to-read-from-FIF.patch
+patch io-5.4/0002-iio-intel-adc-ADC-sample-data-size-is-16bit-only.patch
+patch io-5.4/0001-iio-intel-adc-Implement-IIO-events-for-thresholding-.patch
+patch io-5.4/0002-iio-intel-adc-Enable-LOOP_MODE-with-triggered-buffer.patch
+patch io-5.4/0003-iio-intel-adc-Enable-PSE-DMA-as-flow-controller.patch
+
+patch io-5.4/0001-Calling-power-management-calls-without-entering-crit.patch
+
+patch io-5.4/0001-serial-8250-dwlib-9-bit-data-transfer-mode-negative-.patch
+
+
+patch io-5.4/0001-i2c-busses-Support-for-High-Speed-mode.patch
+patch io-5.4/0001-Hack-spi-PSE-DMA-with-Vtd.patch
+patch io-5.4/0001-HACK-scs-ufs-To-avoid-using-no_auto_hibern8-1-in-boo.patch
+patch io-5.4/0001-usb-typec-ucsi-Fix-the-UCSI-ACPI-enumeration.patch

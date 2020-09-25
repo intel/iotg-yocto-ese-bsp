@@ -1,9 +1,10 @@
 kernel_do_install_append() {
-	sb-keymgmt.py -c sign -kn ${DEPLOY_DIR_IMAGE}/yocto.key -cn ${DEPLOY_DIR_IMAGE}/yocto.crt -usf ${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION} -sf ${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_PACKAGE_NAME}
+	sbsign --key "${DEPLOY_DIR_IMAGE}/secure-boot-certificates/yocto.key" --cert "${DEPLOY_DIR_IMAGE}/secure-boot-certificates/yocto.crt" \
+		--output "${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_PACKAGE_NAME}" "${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION}"
 }
 
-do_install[depends] += "shim:do_deploy"
-DEPENDS += "sb-keymgmt-native"
+do_install[depends] += "virtual/secure-boot-certificates:do_deploy"
+DEPENDS += "sbsigntool-native"
 
 python(){
     d.appendVar('PACKAGES', ' ' + d.getVar('KERNEL_PACKAGE_NAME') + '-image-signed')

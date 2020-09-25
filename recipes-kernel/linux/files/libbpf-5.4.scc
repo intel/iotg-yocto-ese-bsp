@@ -1,7 +1,2 @@
 patch libbpf-5.4/0001-bpf-respect-LDFLAGS.patch
-#patch libbpf-5.4/0001-net-stmmac-add-TGL-ingress-and-egress-phy-latency.patch
-#patch libbpf-5.4/0002-net-stmmac-restructure-Rx-Tx-hardware-timestamping-f.patch
-#patch libbpf-5.4/0003-net-stmmac-introduce-AF_XDP-RX-HW-timestamps.patch
-patch libbpf-5.4/0001-REVERTME-net-stmmac-Workaround-change-PTP-clock-rate.patch
-
 

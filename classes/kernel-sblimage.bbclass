@@ -2,12 +2,11 @@
 # unable to currently handle initrd SBLIMAGE_INITRD_PATH
 inherit python3native
 fakeroot do_sblimage() {
-	mkdir -p ${WORKDIR}/slimboot
 	echo "${APPEND}" > ${WORKDIR}/slimboot/sbl_cmdline.txt
 	${PYTHON} ${STAGING_DIR_NATIVE}/${libexecdir}/slimboot/Tools/GenContainer.py create -cl CMDL:${WORKDIR}/slimboot/sbl_cmdline.txt \
 		KRNL:${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION} INRD:${SBLIMAGE_INITRD_PATH} \
 		-o ${WORKDIR}/slimboot/${SBLIMAGE_NAME} \
-		-k ${IAS_KEY_PATH} -t CLASSIC
+		-k ${PREGENERATED_SIGNING_KEY_SLIMBOOT_KEY_SHA256} -t CLASSIC
 	install -m 644 ${WORKDIR}/slimboot/${SBLIMAGE_NAME} ${D}/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME}
 }
 
@@ -21,6 +20,8 @@ addtask sblimage after do_install before kernel_do_deploy
 DEPENDS += "slimboot-tools-native ${PYTHON_PN}-cryptography-native ${PYTHON_PN}-idna-native"
 do_sblimage[depends] += "${PN}:do_install"
 do_package[depends] += "${PN}:do_sblimage"
+do_deploy[depends] += "${PN}:do_sblimage"
+do_sblimage[cleandirs] += "${WORKDIR}/slimboot"
 
 SBLIMAGE_INITRD_PATH ?= ""
 SBLIMAGE_DEPENDS ?= ""

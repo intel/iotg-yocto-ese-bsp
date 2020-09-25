@@ -1,0 +1,5 @@
+patch rt-ethernet-5.4/0001-Revert-WORKAROUND-net-stmmac-use-DMA-INTM-0-for-TGL-.patch
+patch rt-ethernet-5.4/0002-Revert-REVERTME-net-stmmac-use-napi-to-process-both-.patch
+patch rt-ethernet-5.4/0003-Revert-REVERTME-net-stmmac-use-DMA-Bus-Mode-INTM-MOD.patch
+patch rt-ethernet-5.4/0004-REVERTME-net-stmmac-use-napi-to-process-TX-RX-and-us.patch
+patch rt-ethernet-5.4/0005-net-stmmac-Do-not-restart-aneg-in-common-resume-func.patch
