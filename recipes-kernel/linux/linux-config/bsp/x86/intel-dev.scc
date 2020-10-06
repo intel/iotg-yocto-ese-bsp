@@ -20,3 +20,5 @@ kconf non-hardware lsm.cfg
 kconf hardware tcc.cfg
 kconf non-hardware test.cfg
 kconf non-hardware kernel-compress.cfg
+
+kconf non-hardware hybrid.cfg
