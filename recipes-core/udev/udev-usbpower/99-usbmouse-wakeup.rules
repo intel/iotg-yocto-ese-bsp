@@ -10,3 +10,6 @@ ACTION=="add" \
 , SUBSYSTEM=="usb" \
 , ENV{ID_USB_INTERFACES}==":e00101:" \
 , RUN+="/bin/sh -c 'echo enabled > /sys$env{DEVPATH}/power/wakeup'"
+
+#custom script to enable wakeup for USB hotplug, the match is through idVendor(1d6b) and iproduct (03 - hub)
+ACTION=="add", SUBSYSTEM=="usb", DRIVERS=="usb", ATTRS{idVendor}=="1d6b", ATTRS{idProduct}=="0003", ATTR{power/wakeup}="enabled", ATTR{power/usb3_hardware_lpm_u1}="enabled", ATTR{power/usb3_hardware_lpm_u2}="enabled"

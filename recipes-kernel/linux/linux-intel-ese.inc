@@ -36,8 +36,8 @@ SRC_URI_append_x86-64 = " ${@bb.utils.contains("DISTRO_FEATURES","backport-iwlwi
 # do we want TPM?
 SRC_URI_append_x86-64 = " ${@bb.utils.contains("MACHINE_FEATURES","tpm", "file://bsp/${BSP_SUBTYPE}/yes-tpm.cfg", "file://bsp/${BSP_SUBTYPE}/no-tpm.cfg", d)}"
 
-# from meta-virtualization, optional
-include recipes-kernel/linux/linux-yocto_virtualization.inc
+# from meta-virtualization, optional for zeus
+include ${@bb.utils.contains('LAYERSERIES_CORENAMES', 'zeus', 'recipes-kernel/linux/linux-yocto_virtualization.inc', '', d)}
 
 #########
 # common
