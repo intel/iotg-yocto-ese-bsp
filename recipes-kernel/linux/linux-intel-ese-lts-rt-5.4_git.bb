@@ -12,11 +12,11 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 # RT specific configuration
 SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
 
+# resctrl patches for 5.4
+SRC_URI_append = " file://resctrl-5.4.scc"
+
 # Programmable Software Engine
 SRC_URI_append = " file://ishtp-5.4.scc"
-
-# Ethernet patches for 5.4
-SRC_URI_append = " file://rt-ethernet-5.4.scc"
 
 # io patches for 5.4
 SRC_URI_append = " file://rt-io-5.4.scc"

@@ -14,6 +14,9 @@ SRC_URI_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'file://b
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'openssl-native', '', d)}"
 INHIBIT_PACKAGE_STRIP = "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', '1', '0', d)}"
 
+# resctrl patches for 5.4
+SRC_URI_append = " file://resctrl-5.4.scc"
+
 # Programmable Software Engine
 SRC_URI_append = " file://ishtp-5.4.scc"
 
@@ -25,6 +28,3 @@ SRC_URI_append = " file://libbpf-5.4.scc"
 
 # Graphics patch
 SRC_URI_append = " file://gfx-5.4.scc"
-
-# Ethernet patches
-SRC_URI_append = " file://ethernet-5.4.scc"
