@@ -47,3 +47,5 @@ patch io-5.4/0001-Hack-spi-PSE-DMA-with-Vtd.patch
 patch io-5.4/0001-HACK-scs-ufs-To-avoid-using-no_auto_hibern8-1-in-boo.patch
 patch io-5.4/0001-GPIO-Fix-for-PSE-GPIO-generating-only-one-event-as-i.patch
 patch io-5.4/0001-ACPI-EC-PM-Flush-EC-work-unconditionally-after-wakeu.patch
+
+patch io-5.4/0001-Kernel-Argument-Bypassing-ART-Detection.patch

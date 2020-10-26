@@ -66,3 +66,8 @@ BBCLASSEXTEND_append = " kernel-networkproxy:"
 ########
 SRC_URI_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-isci-boot', ' file://common/isci-boot.cfg', '', d)}"
 SRC_URI_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-builtin-ethernet', ' file://common/builtin-ethernet.cfg', '', d)}"
+
+########
+# External GPUs
+########
+SRC_URI_append_x86-64 = "${@bb.utils.contains('MACHINE_FEATURES', 'external-gpus', ' file://bsp/${BSP_SUBTYPE}/external-gpus.cfg', '', d)}"

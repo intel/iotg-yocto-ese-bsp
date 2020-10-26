@@ -1,6 +1,6 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/yocto;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_machine ?= "698dc049f6493327076986587f9d0016d6f97a20"
+SRCREV_machine ?= "87c695acb4e934a630d9978555e987b2c7602eba"
 LINUX_VERSION ?= "5.4"
 LINUX_KERNEL_TYPE = "lts"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
@@ -13,9 +13,6 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 SRC_URI_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'file://bsp/${BSP_SUBTYPE}/security.scc', '', d)}"
 DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'openssl-native', '', d)}"
 INHIBIT_PACKAGE_STRIP = "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', '1', '0', d)}"
-
-# resctrl patches for 5.4
-SRC_URI_append = " file://resctrl-5.4.scc"
 
 # Programmable Software Engine
 SRC_URI_append = " file://ishtp-5.4.scc"
