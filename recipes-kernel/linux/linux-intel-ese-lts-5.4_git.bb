@@ -1,6 +1,6 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/yocto;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_machine ?= "87c695acb4e934a630d9978555e987b2c7602eba"
+SRCREV_machine ?= "6461d5d288f2c9f03a4f44b784003b4ac25ec5e1"
 LINUX_VERSION ?= "5.4"
 LINUX_KERNEL_TYPE = "lts"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
