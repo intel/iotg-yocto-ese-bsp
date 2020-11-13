@@ -16,7 +16,7 @@ do_multikernel_setup(){
 }
 do_multikernel_setup[doc] = "Multikernel support task for out of tree kernel modules"
 
-addtask multikernel_setup after do_compile_kernelmodules before do_build
+addtask multikernel_setup after do_compile_kernelmodules before do_install
 
 python do_multikernel_clean(){
     import os

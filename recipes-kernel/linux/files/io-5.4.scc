@@ -49,3 +49,5 @@ patch io-5.4/0001-GPIO-Fix-for-PSE-GPIO-generating-only-one-event-as-i.patch
 patch io-5.4/0001-ACPI-EC-PM-Flush-EC-work-unconditionally-after-wakeu.patch
 
 patch io-5.4/0001-Kernel-Argument-Bypassing-ART-Detection.patch
+patch io-5.4/0001-i2c-busses-FS-HS-DMA-PM.patch
+patch io-5.4/0001-pwm-dwc-writel.patch

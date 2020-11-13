@@ -1,7 +1,7 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/preempt-rt;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_machine ?= "8be9a78367e25eb53c3af59a891a55ea78e956ca"
-LINUX_VERSION ?= "5.4"
+SRCREV_machine ?= "6f0f7e5dd27c1798d0d58ccdf3cccebf79aef8a0"
+LINUX_VERSION ?= "5.4.70"
 LINUX_KERNEL_TYPE = "preempt-rt"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
@@ -17,6 +17,3 @@ SRC_URI_append = " file://ishtp-5.4.scc"
 
 # io patches for 5.4
 SRC_URI_append = " file://rt-io-5.4.scc"
-
-# Ethernet patches
-SRC_URI_append = " file://rt-ethernet-5.4.scc"
