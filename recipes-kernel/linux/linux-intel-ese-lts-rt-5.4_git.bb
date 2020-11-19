@@ -1,7 +1,7 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/preempt-rt;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
 SRCREV_machine ?= "6f0f7e5dd27c1798d0d58ccdf3cccebf79aef8a0"
-LINUX_VERSION ?= "5.4.70"
+LINUX_VERSION ?= "5.4.70-rt40"
 LINUX_KERNEL_TYPE = "preempt-rt"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
