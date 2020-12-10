@@ -2,7 +2,7 @@
 FILESEXTRAPATHS_prepend := "${LAYERDIR-ese-bsp}/recipes-kernel/linux/linux-config:"
 python networkproxy_virtclass_handler() {
     d.appendVar('PN', '-networkproxy')
-    d.appendVar('LINUX_KERNEL_TYPE', '-networkproxy')
+    d.appendVar('LINUX_VERSION_EXTENSION', '-networkproxy')
     d.appendVar('SRC_URI', ' file://bsp/networkproxy.scc')
 }
 

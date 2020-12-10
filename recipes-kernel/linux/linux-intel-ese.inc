@@ -2,7 +2,8 @@ require recipes-kernel/linux/linux-yocto.inc
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-config:${THISDIR}/files:"
 
-LINUX_VERSION_EXTENSION = "-intel-${LINUX_KERNEL_TYPE}"
+LINUX_KERNEL_TYPE = "standard"
+LINUX_VERSION_EXTENSION = "-intel-ese-${LINUX_KERNEL_TYPE}"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 DEPENDS += "util-linux-native openssl-native elfutils-native lz4-native"
@@ -71,3 +72,13 @@ SRC_URI_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-builtin-ether
 # External GPUs
 ########
 SRC_URI_append_x86-64 = "${@bb.utils.contains('MACHINE_FEATURES', 'external-gpus', ' file://bsp/${BSP_SUBTYPE}/external-gpus.cfg', '', d)}"
+
+########
+# debug data, will cause huge size increase, module compression recommended
+########
+SRC_URI_append_x86-64 = "${@bb.utils.contains_any('DISTRO_FEATURES', ['debug-tweaks', 'dbg-pkgs'], ' file://common/kenel-debug.cfg', '', d)}"
+
+########
+# compress modules
+########
+SRC_URI_append_x86-64 = "${@bb.utils.contains('DISTRO_FEATURES', 'kernel-compress-modules', ' file://common/module-compress.cfg', '', d)}"

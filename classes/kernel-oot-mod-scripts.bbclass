@@ -1,12 +1,12 @@
 DEPENDS += "bc-native openssl-native"
 
-# out of tree kernel module support (replaces make-mod-scripts)
+# out of tree kernel module support (replaces make-mod-scripts for non default kernels)
 # maps KERNEL_PACKAGE_NAME to recipe name so that oot modules can reliably depend and use them
 do_multikernel_setup(){
-        unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
-        oe_runmake CC="${KERNEL_CC}" LD="${KERNEL_LD}" AR="${KERNEL_AR}" \
-                HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}" HOSTCPP="${BUILD_CPP}" \
-                -C ${STAGING_KERNEL_DIR} O=${STAGING_KERNEL_BUILDDIR} scripts prepare
+	unset CFLAGS CPPFLAGS CXXFLAGS LDFLAGS
+	oe_runmake CC="${KERNEL_CC}" LD="${KERNEL_LD}" AR="${KERNEL_AR}" \
+	HOSTCC="${BUILD_CC} ${BUILD_CFLAGS} ${BUILD_LDFLAGS}" HOSTCPP="${BUILD_CPP}" \
+	-C ${STAGING_KERNEL_DIR} O=${STAGING_KERNEL_BUILDDIR} scripts prepare
 
 	mkdir -p "${TMPDIR}/work-shared/${MACHINE}/multikernel/${PN}"
         echo "${KERNEL_PACKAGE_NAME}" > "${STAGING_KERNEL_BUILDDIR}/kernel-package-name"
@@ -32,3 +32,9 @@ python do_multikernel_clean(){
         bb.note("%s not empty, ignoring")
 }
 CLEANFUNCS_append = " do_multikernel_clean"
+
+# force make-mod-scripts to run first to avoid race condition if it is the default kernel
+python(){
+  if d.getVar('KERNEL_PACKAGE_NAME') == 'kernel':
+    d.appendVarFlag('do_multikernel_setup', 'depends', ' make-mod-scripts:do_compile')
+}

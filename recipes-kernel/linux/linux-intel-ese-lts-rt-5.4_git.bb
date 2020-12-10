@@ -1,8 +1,9 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/preempt-rt;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_machine ?= "6f0f7e5dd27c1798d0d58ccdf3cccebf79aef8a0"
-LINUX_VERSION ?= "5.4.70-rt40"
+SRCREV_machine ?= "cee47e7a1ca63213d933b52a3dcb5857d9020ee2"
+LINUX_VERSION ?= "5.4.74"
 LINUX_KERNEL_TYPE = "preempt-rt"
+LINUX_VERSION_EXTENSION_append = "-lts-rt"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
 require recipes-kernel/linux/linux-intel-ese.inc

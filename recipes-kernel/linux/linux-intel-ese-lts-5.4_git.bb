@@ -1,8 +1,8 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/yocto;name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_machine ?= "e54641516247a77adbc3c314ddf1f7e8f7cc2787"
-LINUX_VERSION ?= "5.4.73"
-LINUX_KERNEL_TYPE = "lts"
+SRCREV_machine ?= "b6629a1e074830c6df485415e001f75c7e5f2b45"
+LINUX_VERSION ?= "5.4.77"
+LINUX_VERSION_EXTENSION_append = "-lts"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
 require recipes-kernel/linux/linux-intel-ese.inc
