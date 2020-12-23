@@ -1,4 +1,5 @@
 require recipes-kernel/linux/linux-yocto.inc
+require recipes-kernel/linux/meta-intel-compat-kernel.inc
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-config:${THISDIR}/files:"
 
@@ -14,28 +15,47 @@ do_kernel_configme[depends] += "${PN}:do_prepare_recipe_sysroot"
 BSPSUBTYPE_x86-64 = "x86"
 BSP_SUBTYPE ??= "${BSPSUBTYPE}"
 
+### workaround to prevent signed modules from being stripped
+INHIBIT_PACKAGE_STRIP = "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', '1', '0', d)}"
+
+########
+# from yocto kernel cache
+########
+
+KERNEL_FEATURES_append_x86-64 = " bsp/intel-x86/intel-x86.scc"
+
+KERNEL_FEATURES_append_x86-64 = " \
+cfg/paravirt_kvm.scc \
+features/criu/criu-enable.scc \
+features/debug/printk.scc \
+features/intel-persistent-memory/intel-x86-64-pmem.scc \
+features/kvm/qemu-kvm-enable.scc \
+features/latencytop/latencytop.scc \
+features/module-signing/signing.scc \
+features/mpx/mpx.scc \
+features/netfilter/netfilter.scc \
+features/nf_tables/nf_tables.scc \
+features/security/security.scc \
+features/taskstats/taskstats.scc \
+"
+
 ##########
 # x86_64
 ##########
-
-SRC_URI_append_x86-64 = \
-" file://bsp/${BSP_SUBTYPE}/defconfig \
-  file://bsp/${BSP_SUBTYPE}/intel-dev.scc \
-"
+KERNEL_FEATURES_append_x86-64 = " bsp/${BSP_SUBTYPE}/intel-dev.scc"
 
 # qemu virtio guest
-SRC_URI_append_x86-64 = " file://bsp/${BSP_SUBTYPE}/virtio-guest.scc"
+KERNEL_FEATURES_append_x86-64 = " bsp/${BSP_SUBTYPE}/virtio-guest.scc"
 
-# Optional kernel security harderning that may interfere with debugging
-SRC_URI_append_x86-64 = " ${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'file://bsp/${BSP_SUBTYPE}/security.scc', '', d)}"
-DEPENDS_append_x86-64 = " ${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'openssl-native', '', d)}"
+# kernel security harderning that may interfere with debugging
+DEPENDS_append_x86-64 = " openssl-native"
 INHIBIT_PACKAGE_STRIP = "1"
 
 # are we using backport-iwlwifi?
-SRC_URI_append_x86-64 = " ${@bb.utils.contains("DISTRO_FEATURES","backport-iwlwifi", "file://bsp/${BSP_SUBTYPE}/no-wifi.cfg", "file://bsp/${BSP_SUBTYPE}/yes-wifi.cfg", d)}"
+KERNEL_FEATURES_append_x86-64 = " ${@bb.utils.contains("DISTRO_FEATURES","backport-iwlwifi", "bsp/${BSP_SUBTYPE}/no-wifi.cfg", "bsp/${BSP_SUBTYPE}/yes-wifi.cfg", d)}"
 
 # do we want TPM?
-SRC_URI_append_x86-64 = " ${@bb.utils.contains("MACHINE_FEATURES","tpm", "file://bsp/${BSP_SUBTYPE}/yes-tpm.cfg", "file://bsp/${BSP_SUBTYPE}/no-tpm.cfg", d)}"
+KERNEL_FEATURES_append_x86-64 = " ${@bb.utils.contains("MACHINE_FEATURES","tpm", "bsp/${BSP_SUBTYPE}/yes-tpm.cfg", "bsp/${BSP_SUBTYPE}/no-tpm.cfg", d)}"
 
 # from meta-virtualization, optional for zeus
 include ${@bb.utils.contains('LAYERSERIES_CORENAMES', 'zeus', 'recipes-kernel/linux/linux-yocto_virtualization.inc', '', d)}
@@ -44,13 +64,9 @@ include ${@bb.utils.contains('LAYERSERIES_CORENAMES', 'zeus', 'recipes-kernel/li
 # common
 #########
 
-SRC_URI_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'dm-verity', 'file://dmverity.cfg', '', d)}"
-SRC_URI_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'smack', 'file://lsm-stacking.cfg', '', d)}"
-SRC_URI_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'lsm-debug', 'file://lsm-debug.cfg', '', d)}"
-
-SRC_URI_append = " git://git.yoctoproject.org/yocto-kernel-cache;type=kmeta;name=meta;branch=master;destsuffix=${KMETA}"
-SRCREV_meta ?= "8b7b8b81908ae2fb83c5e367419f7e7dd1fd4f54"
-KMETA ?= "kernel-meta"
+KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'dm-verity', ' dmverity.cfg', '', d)}"
+KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'smack', ' lsm-stacking.cfg', '', d)}"
+KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'lsm-debug', ' lsm-debug.cfg', '', d)}"
 
 #########
 # optional stub settings
@@ -65,20 +81,25 @@ BBCLASSEXTEND_append = " kernel-networkproxy:"
 ########
 # Network boot support
 ########
-SRC_URI_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-isci-boot', ' file://common/isci-boot.cfg', '', d)}"
-SRC_URI_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-builtin-ethernet', ' file://common/builtin-ethernet.cfg', '', d)}"
+KERNEL_FEATURES_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-isci-boot', ' common/isci-boot.cfg', '', d)}"
+KERNEL_FEATURES_append = "${@bb.utils.contains('MACHINE_FEATURES', 'kernel-builtin-ethernet', ' common/builtin-ethernet.cfg', '', d)}"
 
 ########
 # External GPUs
 ########
-SRC_URI_append_x86-64 = "${@bb.utils.contains('MACHINE_FEATURES', 'external-gpus', ' file://bsp/${BSP_SUBTYPE}/external-gpus.cfg', '', d)}"
+KERNEL_FEATURES_append_x86-64 = "${@bb.utils.contains('MACHINE_FEATURES', 'external-gpus', ' bsp/${BSP_SUBTYPE}/external-gpus.cfg', '', d)}"
 
 ########
 # debug data, will cause huge size increase, module compression recommended
 ########
-SRC_URI_append_x86-64 = "${@bb.utils.contains_any('DISTRO_FEATURES', ['debug-tweaks', 'dbg-pkgs'], ' file://common/kenel-debug.cfg', '', d)}"
+KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'kernel-debug', ' common/kenel-debug.cfg', '', d)}"
 
 ########
 # compress modules
 ########
-SRC_URI_append_x86-64 = "${@bb.utils.contains('DISTRO_FEATURES', 'kernel-compress-modules', ' file://common/module-compress.cfg', '', d)}"
+KERNEL_FEATURES_append_x86-64 = "${@bb.utils.contains('DISTRO_FEATURES', 'kernel-compress-modules', ' common/module-compress.cfg', '', d)}"
+
+########
+# force dummy file to be pulled in so that scc can find linux-config/ files via KERNEL_FEATURES
+########
+SRC_URI_append = " file://dummy.scc"

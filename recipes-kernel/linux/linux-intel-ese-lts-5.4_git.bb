@@ -1,18 +1,10 @@
-KERNEL_SRC_URI ?= "git://github.com/intel/linux-intel-lts.git;protocol=https;branch=5.4/yocto;name=machine"
-SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_machine ?= "b6629a1e074830c6df485415e001f75c7e5f2b45"
-LINUX_VERSION ?= "5.4.77"
+require ./linux-intel-ese-lts-5.4.inc
+require ./linux-intel-ese-lts.inc
+require ./yocto-kernel-cache.inc
+require ./linux-intel-ese.inc
+
 LINUX_VERSION_EXTENSION_append = "-lts"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
-
-require recipes-kernel/linux/linux-intel-ese.inc
-
-LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
-
-# Optional kernel security harderning that may interfere with debugging
-SRC_URI_append = " ${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'file://bsp/${BSP_SUBTYPE}/security.scc', '', d)}"
-DEPENDS += "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', 'openssl-native', '', d)}"
-INHIBIT_PACKAGE_STRIP = "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', '1', '0', d)}"
 
 # Programmable Software Engine
 SRC_URI_append = " file://ishtp-5.4.scc"

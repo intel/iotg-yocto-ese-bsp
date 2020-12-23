@@ -28,6 +28,11 @@ python do_put_initramfs(){
     shutil.move(cfgfile_temp, cfgfile)
 }
 
+# dummy task to make sure initramfs is built
+python do_initramfs_deps() {
+}
+addtask do_initramfs_deps
+
 python(){
     import re
     image = d.getVar("INITRAMFS_IMAGE_RECIPE")
@@ -38,7 +43,8 @@ python(){
             flag = "depends"
         d.appendVarFlag("do_kernel_configme", flag, " " + image + ":do_image_complete")
         d.appendVarFlag("do_kernel_configme", "postfuncs", " do_put_initramfs")
-        # workaround to force rebuild if image updated
-        d.appendVarFlag("do_compile", flag, " " + image + ":do_image_complete")
-        d.appendVar('SRC_URI', ' file://common/initrd-embed.scc')
+        d.appendVar('KERNEL_FEATURES', ' common/initrd-embed.scc')
+
+        d.appendVarFlag('do_kernel_configme', 'recrdeptask', ' do_initramfs_deps')
+        d.appendVarFlag('do_initramfs_deps', flag, ' ' + image + ':do_image_complete')
 }

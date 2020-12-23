@@ -2,6 +2,3 @@ patch rt-io-5.4/0001-TGPIO-Porting-tgpio-driver-to-RT-kernel.patch
 patch rt-io-5.4/0001-Kernel-Argument-Bypassing-ART-Detection.patch
 patch rt-io-5.4/0001-MFD-MFD-support-for-TGPIO-and-GPIO.patch
 patch rt-io-5.4/0001-gpio-Port-PSE-GPIO-changes-from-lts-to-rt-kernel.patch
-
-patch rt-io-5.4/tglh/0001-spi-pxa2xx-Add-support-for-Intel-Tiger-Lake-PCH-H.patch
-patch rt-io-5.4/tglh/0001-pinctrl-tigerlake-Add-support-for-Tiger-Lake-H.patch
