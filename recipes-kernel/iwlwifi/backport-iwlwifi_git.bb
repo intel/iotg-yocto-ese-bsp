@@ -7,7 +7,7 @@ REQUIRED_DISTRO_FEATURES = "wifi"
 
 LIC_FILES_CHKSUM = "file://${S}/COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
 
-inherit module features_check
+inherit module
 
 SRC_URI = "git://github.com/intel/backport-iwlwifi.git;nobranch=1;protocol=https \
            file://0001-Makefile.real-skip-host-install-scripts.patch \

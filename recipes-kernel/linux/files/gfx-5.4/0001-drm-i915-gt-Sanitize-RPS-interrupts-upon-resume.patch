@@ -1,4 +1,4 @@
-From 01a4b3e325c29dff96a3ab82f6fb024f113b88e2 Mon Sep 17 00:00:00 2001
+From c2ea0a2b7411ff397ad8f0cef2c6143ada5f0e43 Mon Sep 17 00:00:00 2001
 From: Chris Wilson <chris@chris-wilson.co.uk>
 Date: Sat, 2 May 2020 18:35:12 +0100
 Subject: [PATCH 1/2] drm/i915/gt: Sanitize RPS interrupts upon resume
@@ -14,6 +14,7 @@ Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
 Cc: Andi Shyti <andi@etezian.org>
 Reviewed-by: Andi Shyti <andi@etezian.org>
 Link: https://patchwork.freedesktop.org/patch/msgid/20200502173512.32353-1-chris@chris-wilson.co.uk
+Signed-off-by: James Xiong <james.xiong@intel.com>
 ---
  drivers/gpu/drm/i915/gt/intel_gt_pm.c | 2 ++
  drivers/gpu/drm/i915/gt/intel_rps.c   | 6 ++++--
@@ -66,3 +67,4 @@ index 43bf88939a51..3709dce250ab 100644
  void intel_rps_driver_unregister(struct intel_rps *rps);
 -- 
 2.17.1
+
