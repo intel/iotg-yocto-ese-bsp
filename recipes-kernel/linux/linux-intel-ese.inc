@@ -26,6 +26,7 @@ KERNEL_FEATURES_append_x86-64 = " bsp/intel-x86/intel-x86.scc"
 
 KERNEL_FEATURES_append_x86-64 = " \
 cfg/paravirt_kvm.scc \
+cgl/cfg/iscsi.scc \
 features/criu/criu-enable.scc \
 features/debug/printk.scc \
 features/intel-persistent-memory/intel-x86-64-pmem.scc \
@@ -67,6 +68,7 @@ include ${@bb.utils.contains('LAYERSERIES_CORENAMES', 'zeus', 'recipes-kernel/li
 KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'dm-verity', ' dmverity.cfg', '', d)}"
 KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'smack', ' lsm-stacking.cfg', '', d)}"
 KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'lsm-debug', ' lsm-debug.cfg', '', d)}"
+KERNEL_FEATURES_append = " common/devmem.cfg common/mod-versions.cfg"
 
 #########
 # optional stub settings
