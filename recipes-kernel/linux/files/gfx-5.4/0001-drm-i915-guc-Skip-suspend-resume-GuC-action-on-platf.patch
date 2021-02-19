@@ -39,6 +39,7 @@ Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
 Link: https://patchwork.freedesktop.org/patch/msgid/20191115231538.1249-1-don.hiatt@intel.com
 (cherry picked from commit 82e0c5bbd6eb1d274b5a3e519ff0ab91f1f8e537)
 Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Signed-off-by: James Xiong <james.xiong@intel.com>
 ---
  drivers/gpu/drm/i915/gt/uc/intel_guc.c | 15 +++++++++++++++
  drivers/gpu/drm/i915/i915_drv.h        |  6 ++++++

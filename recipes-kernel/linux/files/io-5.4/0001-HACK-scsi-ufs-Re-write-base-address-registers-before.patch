@@ -1,0 +1,75 @@
+From b04cdfea30e5b7ff74e9da1e3776a1ab0497aadd Mon Sep 17 00:00:00 2001
+From: Adrian Hunter <adrian.hunter@intel.com>
+Date: Tue, 10 Nov 2020 10:32:30 +0200
+Subject: [PATCH] HACK: scsi: ufs: Re-write base-address registers before
+ resume
+
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+---
+ drivers/scsi/ufs/ufshcd-pci.c | 37 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+
+diff --git a/drivers/scsi/ufs/ufshcd-pci.c b/drivers/scsi/ufs/ufshcd-pci.c
+index 65ead38084cc..53a0c4f1ed25 100644
+--- a/drivers/scsi/ufs/ufshcd-pci.c
++++ b/drivers/scsi/ufs/ufshcd-pci.c
+@@ -67,6 +67,41 @@ static int ufs_intel_link_startup_notify(struct ufs_hba *hba,
+ 	return err;
+ }
+ 
++static int ufs_intel_resume(struct ufs_hba *hba, enum ufs_pm_op op)
++{
++	u32 reg;
++
++	reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_LIST_BASE_L);
++	dev_dbg(hba->dev, "%s: UTRLBA: %#x\n", __func__, reg);
++	reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_LIST_BASE_H);
++	dev_dbg(hba->dev, "%s: UTRLBAU: %#x\n", __func__, reg);
++	reg = ufshcd_readl(hba, REG_UTP_TASK_REQ_LIST_BASE_L);
++	dev_dbg(hba->dev, "%s: UTMRLBA: %#x\n", __func__, reg);
++	reg = ufshcd_readl(hba, REG_UTP_TASK_REQ_LIST_BASE_H);
++	dev_dbg(hba->dev, "%s: UTMRLBAU: %#x\n", __func__, reg);
++
++	/* Configure UTRL and UTMRL base address registers */
++	ufshcd_writel(hba, lower_32_bits(hba->utrdl_dma_addr),
++			REG_UTP_TRANSFER_REQ_LIST_BASE_L);
++	ufshcd_writel(hba, upper_32_bits(hba->utrdl_dma_addr),
++			REG_UTP_TRANSFER_REQ_LIST_BASE_H);
++	ufshcd_writel(hba, lower_32_bits(hba->utmrdl_dma_addr),
++			REG_UTP_TASK_REQ_LIST_BASE_L);
++	ufshcd_writel(hba, upper_32_bits(hba->utmrdl_dma_addr),
++			REG_UTP_TASK_REQ_LIST_BASE_H);
++
++	reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_LIST_BASE_L);
++	dev_dbg(hba->dev, "%s: UTRLBA: %#x\n", __func__, reg);
++	reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_LIST_BASE_H);
++	dev_dbg(hba->dev, "%s: UTRLBAU: %#x\n", __func__, reg);
++	reg = ufshcd_readl(hba, REG_UTP_TASK_REQ_LIST_BASE_L);
++	dev_dbg(hba->dev, "%s: UTMRLBA: %#x\n", __func__, reg);
++	reg = ufshcd_readl(hba, REG_UTP_TASK_REQ_LIST_BASE_H);
++	dev_dbg(hba->dev, "%s: UTMRLBAU: %#x\n", __func__, reg);
++
++	return 0;
++}
++
+ static int ufs_intel_ehl_init(struct ufs_hba *hba)
+ {
+ 	hba->quirks |= UFSHCD_QUIRK_BROKEN_AUTO_HIBERN8;
+@@ -76,12 +111,14 @@ static int ufs_intel_ehl_init(struct ufs_hba *hba)
+ static struct ufs_hba_variant_ops ufs_intel_cnl_hba_vops = {
+ 	.name                   = "intel-pci",
+ 	.link_startup_notify	= ufs_intel_link_startup_notify,
++	.resume			= ufs_intel_resume,
+ };
+ 
+ static struct ufs_hba_variant_ops ufs_intel_ehl_hba_vops = {
+ 	.name                   = "intel-pci",
+ 	.init			= ufs_intel_ehl_init,
+ 	.link_startup_notify	= ufs_intel_link_startup_notify,
++	.resume			= ufs_intel_resume,
+ };
+ 
+ #ifdef CONFIG_PM_SLEEP
+-- 
+2.17.1
+
