@@ -1,0 +1,29 @@
+From 7afb52768cb6c46b8d8e0554227da464c21b9b1d Mon Sep 17 00:00:00 2001
+From: Pan Xiuli <xiuli.pan@linux.intel.com>
+Date: Mon, 22 Feb 2021 06:22:00 +0000
+Subject: [PATCH 1/2] ASoC: SOF: intel: fix wrong poll bits in dsp power down
+
+The ADSPCS_SPA is Set Power Active bit, to check if DSP is power down
+we need to check ADSPCS_CPA, the Current Power Active bit.
+
+Signed-off-by: Pan Xiuli <xiuli.pan@linux.intel.com>
+---
+ sound/soc/sof/intel/hda-dsp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/sof/intel/hda-dsp.c b/sound/soc/sof/intel/hda-dsp.c
+index fb55a3c5afd0..94b093b370e2 100644
+--- a/sound/soc/sof/intel/hda-dsp.c
++++ b/sound/soc/sof/intel/hda-dsp.c
+@@ -179,7 +179,7 @@ int hda_dsp_core_power_down(struct snd_sof_dev *sdev, unsigned int core_mask)
+ 
+ 	return snd_sof_dsp_read_poll_timeout(sdev, HDA_DSP_BAR,
+ 				HDA_DSP_REG_ADSPCS, adspcs,
+-				!(adspcs & HDA_DSP_ADSPCS_SPA_MASK(core_mask)),
++				!(adspcs & HDA_DSP_ADSPCS_CPA_MASK(core_mask)),
+ 				HDA_DSP_REG_POLL_INTERVAL_US,
+ 				HDA_DSP_PD_TIMEOUT * USEC_PER_MSEC);
+ }
+-- 
+2.25.1
+

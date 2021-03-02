@@ -28,3 +28,6 @@ SRC_URI_append = " file://gfx-5.4.scc"
 
 # Ethernet patches
 SRC_URI_append = " file://ethernet-5.4.scc"
+
+# Audio patches
+SRC_URI_append = " file://audio-5.4.scc"

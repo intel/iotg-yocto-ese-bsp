@@ -20,3 +20,6 @@ SRC_URI_append = " file://rt-ethernet-5.4.scc"
 
 # io patches for 5.4
 SRC_URI_append = " file://rt-io-5.4.scc"
+
+# audio patches for 5.4
+SRC_URI_append = " file://rt-audio-5.4.scc"

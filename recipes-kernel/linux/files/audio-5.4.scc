@@ -1,0 +1,2 @@
+patch audio-5.4/0001-ASoC-SOF-intel-fix-wrong-poll-bits-in-dsp-power-down.patch
+patch audio-5.4/0002-ASoC-SOF-sof-pci-dev-use-sof_suspend-as-shutdown-cal.patch
