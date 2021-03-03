@@ -1,0 +1,1 @@
+THP_KERNEL_COMMON_ARGS = "hugepages=1024"

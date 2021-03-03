@@ -6,20 +6,24 @@ fakeroot do_sblimage_sha256() {
 	${PYTHON} ${STAGING_DIR_NATIVE}/${libexecdir}/slimboot/Tools/GenContainer.py create -cl CMDL:${WORKDIR}/slimboot_sha256/sbl_cmdline.txt \
 		KRNL:${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION} INRD:${SBLIMAGE_INITRD_PATH} \
 		-o ${WORKDIR}/slimboot_sha256/${SBLIMAGE_NAME_sha256} \
-		-k ${PREGENERATED_SIGNING_KEY_SLIMBOOT_KEY_SHA256} -t CLASSIC \
+		-k ${DEPLOY_DIR_IMAGE}/secure-boot-certificates-slimboot-2048/SigningKey.pem -t CLASSIC \
 		-a RSA2048_PSS_SHA2_256
 	install -m 644 ${WORKDIR}/slimboot_sha256/${SBLIMAGE_NAME_sha256} ${D}/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME_sha256}
+	if test -f "${D}/${KERNEL_IMAGEDEST}/${DEFAULT_secure-boot-certificates-slimboot}" -a "${DEFAULT_secure-boot-certificates-slimboot}" = "${SBLIMAGE_NAME_sha384}"; then
+		rm -f ${D}/${KERNEL_IMAGEDEST}/sbl_os
+		ln -s "${DEFAULT_secure-boot-certificates-slimboot}" ${D}/${KERNEL_IMAGEDEST}/sbl_os
+	fi
 }
 
 kernel_do_deploy_append() {
 	install -m 0644 ${D}/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME_sha256} ${DEPLOYDIR}/${SBLIMAGE_NAME_sha256}
 }
 
-do_sblimage[doc] = "Packs kernel commandline, image and initrd for slimboot OSLoader payload (GenContainer)"
+do_sblimage_sha256[doc] = "Packs kernel commandline, image and initrd for slimboot OSLoader payload (GenContainer)"
 addtask sblimage_sha256 after do_install before kernel_do_deploy
 
 DEPENDS += "slimboot-tools-native ${PYTHON_PN}-cryptography-native ${PYTHON_PN}-idna-native"
-do_sblimage[depends] += "${PN}:do_install"
+do_sblimage_sha256[depends] += "${PN}:do_install virtual/secure-boot-certificates-slimboot-2048:do_deploy"
 do_package[depends] += "${PN}:do_sblimage_sha256"
 do_deploy[depends] += "${PN}:do_sblimage_sha256"
 do_sblimage_sha256[cleandirs] += "${WORKDIR}/slimboot_sha256"
@@ -38,11 +42,16 @@ python(){
 
     name = d.getVar('KERNEL_PACKAGE_NAME')
     if name == 'kernel':
-        d.setVar('SBLIMAGE_NAME_sha256', d.expand("${BASE_SBLIMAGE_sha256}"))
+        sblname = d.expand("${BASE_SBLIMAGE_sha256}")
     else:
-        d.setVar('SBLIMAGE_NAME_sha256', d.expand('${BASE_SBLIMAGE_sha256}-${KERNEL_PACKAGE_NAME}'))
+        sblname = d.expand('${BASE_SBLIMAGE_sha256}-${KERNEL_PACKAGE_NAME}')
+    d.setVar('SBLIMAGE_NAME_sha256', sblname)
 
-    d.setVar(d.expand("FILES_${KERNEL_PACKAGE_NAME}-image-sblimage-sha256"), d.expand("/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME_sha256}"))
+    files = d.expand("FILES_${KERNEL_PACKAGE_NAME}-image-sblimage-sha256")
+    d.setVar(files, d.expand("/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME_sha256}"))
+    defload = d.getVar('DEFAULT_secure-boot-certificates-slimboot')
+    if defload == sblname:
+      d.appendVar(files, ' ' + d.expand('${KERNEL_IMAGEDEST}/sbl_os'))
 
     deps = d.getVar('SBLIMAGE_DEPENDS')
     if deps:

@@ -7,7 +7,6 @@ kconf hardware ethernet.cfg
 kconf hardware intel-dev.cfg
 kconf hardware usb.cfg
 kconf hardware audio.cfg
-kconf non-hardware yocto.cfg
 kconf hardware simics-wa.cfg
 
 kconf non-hardware kexec.cfg
@@ -21,4 +20,7 @@ kconf hardware tcc.cfg
 kconf non-hardware test.cfg
 kconf non-hardware kernel-compress.cfg
 
-kconf non-hardware hybrid.cfg
+kconf hardware hybrid.cfg
+kconf hardware sriov.cfg
+kconf hardware pmt.cfg
+kconf hardware gfx.cfg
