@@ -1,7 +1,9 @@
 KBRANCH = "5.10/preempt-rt"
 KMETA_BRANCH = "yocto-5.10"
-SRCREV_meta = "67e74d52f2aaa17ca7041032714368ea81bc8823"
-SRCREV_machine ?= "99b943858d0839a870a0970242a72da9091cd641"
-LINUX_VERSION ?= "5.10.14"
+SRCREV_meta = "eb09284047fec2f09d62068c338ae320c6681bd1"
+SRCREV_machine ?= "2670feac93f6584edd9bdf8d85fa315c6eafa9bd"
+LINUX_VERSION ?= "5.10.25"
 LINUX_KERNEL_TYPE = "preempt-rt"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
+
+SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/audio-adl.scc"

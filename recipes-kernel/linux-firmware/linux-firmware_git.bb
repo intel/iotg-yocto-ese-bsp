@@ -123,7 +123,7 @@ LIC_FILES_CHKSUM = "file://LICENCE.Abilis;md5=b5ee3f410780e56711ad48eadc22b8bc \
                     file://LICENCE.xc4000;md5=0ff51d2dc49fce04814c9155081092f0 \
                     file://LICENCE.xc5000;md5=1e170c13175323c32c7f4d0998d53f66 \
                     file://LICENCE.xc5000c;md5=12b02efa3049db65d524aeb418dd87ca \
-                    file://WHENCE;md5=2ae6cad1c478088dfce9247de4581630 \
+                    file://WHENCE;md5=1e968098233a4f2995c666b0de79ff6a \
                     "
 
 # These are not common licenses, set NO_GENERIC_LICENSE for them
@@ -192,7 +192,7 @@ NO_GENERIC_LICENSE[WHENCE] = "WHENCE"
 
 PE = "1"
 
-SRCREV = "3890db36665dbff4c415b0b0dc5c8d53b2850870"
+SRCREV = "f7915a0c29fee27a310cebd7155b9e3a6eb71a1d"
 
 SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git"
 
@@ -211,6 +211,11 @@ do_compile() {
 do_install() {
 	install -d  ${D}${nonarch_base_libdir}/firmware/
 	cp -r * ${D}${nonarch_base_libdir}/firmware/
+	
+	# to fix the broken symlinks after copying need to run the copy-firmware.sh
+	# this will make sure to add both missing files and symlinks
+	export destdir="${D}${nonarch_base_libdir}/firmware"
+	sh copy-firmware.sh
 
 	# Avoid Makefile to be deployed
 	rm ${D}${nonarch_base_libdir}/firmware/Makefile
