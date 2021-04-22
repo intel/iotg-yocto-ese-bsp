@@ -1,8 +1,6 @@
-KBRANCH = "5.10/yocto"
+KBRANCH = "5.10/adl-s/alpha/yocto"
 KMETA_BRANCH = "yocto-5.10"
-SRCREV_meta = "eb09284047fec2f09d62068c338ae320c6681bd1"
-SRCREV_machine ?= "5005cd852c63c986a0dde501f4159838b4e78758"
-LINUX_VERSION ?= "5.10.26"
+SRCREV_meta = "29ee0b79456c904e73e0ebb32c72a8afcca8740c" 
+SRCREV_machine ?= "d71d3b127d94e2c047a3afe2d4ff7cc7416e92bd"
+LINUX_VERSION ?= "5.10.17"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
-
-SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/audio-adl.scc"
