@@ -9,7 +9,7 @@ fakeroot do_sblimage_sha384() {
 		-k ${DEPLOY_DIR_IMAGE}/secure-boot-certificates-slimboot-3072/SigningKey.pem -t CLASSIC \
 		-a RSA3072_PSS_SHA2_384
 	install -m 644 ${WORKDIR}/slimboot_sha384/${SBLIMAGE_NAME_sha384} ${D}/${KERNEL_IMAGEDEST}/${SBLIMAGE_NAME_sha384}
-	if test "${D}/${KERNEL_IMAGEDEST}/${DEFAULT_secure-boot-certificates-slimboot}" "${DEFAULT_secure-boot-certificates-slimboot}" = "${SBLIMAGE_NAME_sha384}"; then
+	if test -f "${D}/${KERNEL_IMAGEDEST}/${DEFAULT_secure-boot-certificates-slimboot}" -a "${DEFAULT_secure-boot-certificates-slimboot}" = "${SBLIMAGE_NAME_sha384}"; then
 		rm -f ${D}/${KERNEL_IMAGEDEST}/sbl_os
 		ln -s "${DEFAULT_secure-boot-certificates-slimboot}" ${D}/${KERNEL_IMAGEDEST}/sbl_os
 	fi

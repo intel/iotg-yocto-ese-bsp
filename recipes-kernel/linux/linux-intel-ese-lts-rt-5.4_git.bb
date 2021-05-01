@@ -11,3 +11,9 @@ SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
 
 # Programmable Software Engine
 SRC_URI_append = " file://ishtp-5.4.scc"
+
+# TGPIO
+SRC_URI_append = " file://tgpio-5.4.scc"
+
+# IGC / GBE
+SRC_URI_append = " file://ethernet-5.4.scc"
