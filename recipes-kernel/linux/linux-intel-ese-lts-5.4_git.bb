@@ -11,9 +11,3 @@ SRC_URI_append = " file://ishtp-5.4.scc"
 
 # xdp or libbpf patches
 SRC_URI_append = " file://libbpf-5.4.scc"
-
-# TGPIO
-SRC_URI_append = " file://tgpio-5.4.scc"
-
-# IGC / GBE
-SRC_URI_append = " file://ethernet-5.4.scc"

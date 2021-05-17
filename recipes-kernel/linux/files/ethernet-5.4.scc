@@ -1,2 +1,0 @@
-patch ethernet-5.4/0001-igc-Fix-fail-to-set-fragment-size-via-ethtool.patch
-patch ethernet-5.4/0001-Revert-net-phy-dwxpcs-removed-XPCS-irq.patch
