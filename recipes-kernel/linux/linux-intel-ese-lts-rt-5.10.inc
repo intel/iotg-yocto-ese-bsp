@@ -5,5 +5,3 @@ SRCREV_machine ?= "8b07bfbd844f73cbedc1f8eaa63e8b79295745d8"
 LINUX_VERSION ?= "5.10.30"
 LINUX_KERNEL_TYPE = "preempt-rt"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
-
-SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/audio-adl.scc"

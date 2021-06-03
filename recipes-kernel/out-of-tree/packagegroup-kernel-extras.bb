@@ -14,12 +14,11 @@ python(){
   pn = d.getVar('PN')
   image_features = d.get('IMAGE_FEATURES')
 
-  # todo slimboot256/384
-
   install = {
     pn + '-image': [],
     pn + '-dev' : [],
-    pn + '-modules': []
+    pn + '-modules': [],
+    pn + '-image-sblimage': []
   }
   for k in kernels.split() or []:
     if k == vk:
@@ -29,6 +28,7 @@ python(){
     install[pn + '-image'].append(k + '-image')
     install[pn + '-dev'].append(k + '-dev')
     install[pn + '-modules'].append(k + '-modules')
+    install[pn + '-image-sblimage'].append(k + '-image-sblimage')
 
   subpackages = sorted(install.keys())
   d.setVar('PACKAGES', '%s %s' % (pn, ' '.join(sorted(subpackages))))
@@ -36,9 +36,11 @@ python(){
     d.setVar('ALLOW_EMPTY_' + k, '1')
     d.setVar('RDEPENDS_' + k, ' '.join(install[k]))
 
-  rdepends = (pn + '-image', pn + '-modules')
+  rdepends = [pn + '-image', pn + '-modules']
   if 'dev-pkgs' in image_features:
     rdepends.append(pn + '-dev')
+  if 'slimboot' in image_features:
+    rdepends.append(pn + '-image-sblimage')
   d.setVar('RDEPENDS_' + pn, ' '.join(rdepends))
   d.setVar('ALLOW_EMPTY_' + pn, '1')
 }

@@ -12,3 +12,8 @@ SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
 # LTS2020 specific feature configuration
 SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/ipmi.scc"
 
+#Enable Audio for ADL-S/P on kernel 5.10
+SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/audio-adl.scc"
+
+#Enable VMD
+SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/vmd.scc"

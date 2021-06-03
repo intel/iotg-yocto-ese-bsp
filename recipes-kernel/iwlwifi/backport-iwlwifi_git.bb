@@ -14,8 +14,8 @@ SRC_URI = "git://github.com/intel/backport-iwlwifi.git;nobranch=1;protocol=https
            file://iwlwifi.conf \
           "
 
-PV = "60-56+git${SRCPV}"
-SRCREV = "e3a6af8dfaebc0be3d05099459d5a643bd438931"
+PV = "61-76+git${SRCPV}"
+SRCREV = "9401283604a2583c383ea0b85b8ca72dd59d9f5d"
 
 S = "${WORKDIR}/git/iwlwifi-stack-dev"
 
@@ -39,6 +39,7 @@ RDEPENDS_${PN} = "linux-firmware-iwlwifi"
 # CLEANBROKEN doesn't quite work since it needs clean ups, yet make clean is actually broken
 do_configure_append(){
 	git checkout compat kconf
-	oe_runmake defconfig-iwlwifi-public
+	# configure setup is broken and assumes only native build */
+	oe_runmake defconfig-iwlwifi-public CC="${BUILD_CC}"
 	sed -i 's/CPTCFG_IWLMVM_VENDOR_CMDS=y/# CPTCFG_IWLMVM_VENDOR_CMDS is not set/' ${S}/.config
 }
