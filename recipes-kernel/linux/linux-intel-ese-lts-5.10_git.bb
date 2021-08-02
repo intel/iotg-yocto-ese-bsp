@@ -14,6 +14,3 @@ SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/audio-adl.scc"
 
 #Enable IPU for ADL-S/P on kernel 5.10
 SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/ipu-5-10.scc"
-
-#Enable VMD
-SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/vmd.scc"
