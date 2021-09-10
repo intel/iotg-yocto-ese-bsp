@@ -22,7 +22,6 @@ INHIBIT_PACKAGE_STRIP = "${@bb.utils.contains('DISTRO_FEATURES', 'hardened', '1'
 # from yocto kernel cache
 ########
 
-KERNEL_FEATURES_append_x86-64 = " bsp/intel-x86/intel-x86.scc"
 
 KERNEL_FEATURES_append_x86-64 = " \
 cfg/paravirt_kvm.scc \
@@ -69,7 +68,6 @@ KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'dm-verity', '
 KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'smack', ' lsm-stacking.cfg', '', d)}"
 KERNEL_FEATURES_append = "${@bb.utils.contains('DISTRO_FEATURES', 'lsm-debug', ' lsm-debug.cfg', '', d)}"
 KERNEL_FEATURES_append = " common/devmem.cfg common/mod-versions.cfg"
-KERNEL_FEATURES_append = " bsp/${BSP_SUBTYPE}/ipu-5-10.scc"
 KERNEL_FEATURES_append = " bsp/${BSP_SUBTYPE}/vmd.scc"
 KERNEL_FEATURES_append = " bsp/${BSP_SUBTYPE}/amt.scc"
 KERNEL_FEATURES_append = " bsp/${BSP_SUBTYPE}/itbm.scc"

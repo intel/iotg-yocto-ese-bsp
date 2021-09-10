@@ -14,8 +14,8 @@ SRC_URI = "git://github.com/intel/backport-iwlwifi.git;nobranch=1;protocol=https
            file://iwlwifi.conf \
           "
 
-PV = "61-76+git${SRCPV}"
-SRCREV = "9401283604a2583c383ea0b85b8ca72dd59d9f5d"
+PV = "63-70+git${SRCPV}"
+SRCREV = "e39baacd538d9109e4823617ac14051427daba0c"
 
 S = "${WORKDIR}/git/iwlwifi-stack-dev"
 
