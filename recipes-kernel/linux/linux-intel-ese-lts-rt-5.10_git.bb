@@ -3,6 +3,9 @@ require ./linux-intel-ese-lts.inc
 require ./yocto-kernel-cache.inc
 require ./linux-intel-ese.inc
 
+KERNEL_SRC_URI = "git://github.com/sys-oak/linux-intel-restricted-adl-beta.git;protocol=ssh;branch=${KBRANCH};name=machine"
+SRC_URI = "${KERNEL_SRC_URI}"
+
 LINUX_VERSION_EXTENSION_append = "-lts-rt"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
