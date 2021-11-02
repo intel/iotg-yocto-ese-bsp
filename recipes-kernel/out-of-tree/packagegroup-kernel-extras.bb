@@ -33,16 +33,16 @@ python(){
   subpackages = sorted(install.keys())
   d.setVar('PACKAGES', '%s %s' % (pn, ' '.join(sorted(subpackages))))
   for k in subpackages:
-    d.setVar('ALLOW_EMPTY_' + k, '1')
-    d.setVar('RDEPENDS_' + k, ' '.join(install[k]))
+    d.setVar('ALLOW_EMPTY:' + k, '1')
+    d.setVar('RDEPENDS:' + k, ' '.join(install[k]))
 
   rdepends = [pn + '-image', pn + '-modules']
   if 'dev-pkgs' in image_features:
     rdepends.append(pn + '-dev')
   if 'slimboot' in image_features:
     rdepends.append(pn + '-image-sblimage')
-  d.setVar('RDEPENDS_' + pn, ' '.join(rdepends))
-  d.setVar('ALLOW_EMPTY_' + pn, '1')
+  d.setVar('RDEPENDS:' + pn, ' '.join(rdepends))
+  d.setVar('ALLOW_EMPTY:' + pn, '1')
 }
 
 KERNEL_IMAGE_INSTALL ??= "${PREFERRED_PROVIDER_virtual/kernel}"

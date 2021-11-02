@@ -25,6 +25,6 @@ do_install() {
 }
 
 
-RDEPENDS_${PN} = "udev"
+RDEPENDS:${PN} = "udev"
 
-FILES_${PN} += "${sysconfdir}/udev/rules.d/99-usb-serial-sleep.rules"
+FILES:${PN} += "${sysconfdir}/udev/rules.d/99-usb-serial-sleep.rules"

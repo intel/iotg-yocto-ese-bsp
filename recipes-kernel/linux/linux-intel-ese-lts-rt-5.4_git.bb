@@ -3,11 +3,11 @@ require ./linux-intel-ese-lts.inc
 require ./yocto-kernel-cache.inc
 require ./linux-intel-ese.inc
 
-LINUX_VERSION_EXTENSION_append = "-lts-rt"
+LINUX_VERSION_EXTENSION:append = "-lts-rt"
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
 # RT specific configuration
-SRC_URI_append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
+SRC_URI:append = " file://bsp/${BSP_SUBTYPE}/rt.cfg"
 
 # Programmable Software Engine
-SRC_URI_append = " file://ishtp-5.4.scc"
+SRC_URI:append = " file://ishtp-5.4.scc"

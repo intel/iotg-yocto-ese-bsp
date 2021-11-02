@@ -4,5 +4,5 @@ python(){
   for c in sorted(compatibles.split()):
     kernels = d.getVarFlag('KERNEL_PROVIDERS', c) or ''
     for k in sorted(kernels.split()):
-      d.setVar('DISTRO_FEATURES_append_pn-%s' % k, ' backport-iwlwifi')
+      d.setVar('DISTRO_FEATURES:append:pn-%s' % k, ' backport-iwlwifi')
 }

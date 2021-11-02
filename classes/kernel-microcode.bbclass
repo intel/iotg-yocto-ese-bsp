@@ -1,9 +1,9 @@
-DEPENDS_append = " intel-microcode"
-SYSROOT_DIRS_append = " ${nonarch_base_libdir}/firmware"
+DEPENDS:append = " intel-microcode"
+SYSROOT_DIRS:append = " ${nonarch_base_libdir}/firmware"
 
 inherit kernel-embed-fw
 
-python do_put_fw_append(){
+python do_put_fw:append(){
     import re
     import shutil
 

@@ -1,6 +1,6 @@
 # TODO: Handle DEPENDS of ^kernel-module
 # We can't know the ${KERNEL_PACKAGE_NAME}-modules-* until do_multikernel_setup has run
-# use overrides style like DEPENDS_pn-linux-intel-mainline-5.4-backport-iwlwifi for now.
+# use overrides style like DEPENDS:pn-linux-intel-mainline-5.4-backport-iwlwifi for now.
 
 # See also kernel-oot-mod-scripts.bbclass
 python multikernel_virtclass_handler() {
@@ -25,7 +25,7 @@ python multikernel_virtclass_handler() {
             warn = 1
 
     if warn:
-        bb.warn('%s has kernel-modules-* in DEPENDS, kernel-oot-module is currently not able to handle depedencies yet, please manually specify with DEPENDS_pn-%s-%s' % (pn, provider, pn))
+        bb.warn('%s has kernel-modules-* in DEPENDS, kernel-oot-module is currently not able to handle depedencies yet, please manually specify with DEPENDS:pn-%s-%s' % (pn, provider, pn))
 
     # force update variables to use symlink areas (created by kernel do_multikernel_setup task)
     newroot = d.expand('${TMPDIR}/work-shared/${MACHINE}/multikernel/%s' % provider)

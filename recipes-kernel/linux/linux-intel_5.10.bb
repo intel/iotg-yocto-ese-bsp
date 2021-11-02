@@ -9,8 +9,8 @@ require recipes-kernel/linux/meta-intel-compat-kernel.inc
 DEPENDS += "elfutils-native openssl-native util-linux-native"
 
 # For Crystalforest and Romley
-KERNEL_MODULE_AUTOLOAD_append_core2-32-intel-common = " uio"
-KERNEL_MODULE_AUTOLOAD_append_corei7-64-intel-common = " uio"
+KERNEL_MODULE_AUTOLOAD:append_core2-32-intel-common = " uio"
+KERNEL_MODULE_AUTOLOAD:append_corei7-64-intel-common = " uio"
 
 # Functionality flags
 KERNEL_EXTRA_FEATURES ?= "features/netfilter/netfilter.scc features/security/security.scc"
