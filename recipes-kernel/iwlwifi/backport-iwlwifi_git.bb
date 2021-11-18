@@ -23,21 +23,21 @@ EXTRA_OEMAKE = "INSTALL_MOD_PATH=${D} KLIB_BUILD=${KBUILD_OUTPUT}"
 
 MODULES_INSTALL_TARGET="install"
 
-DEPENDS:append = " flex-native bison-native"
+DEPENDS_append = " flex-native bison-native"
 
-do_install:append() {
+do_install_append() {
 	## install configs and service scripts
 	install -d ${D}${sysconfdir}/modprobe.d
 	install -m 0644 ${WORKDIR}/iwlwifi.conf ${D}${sysconfdir}/modprobe.d
 }
 
-RDEPENDS:${PN} = "linux-firmware-iwlwifi"
+RDEPENDS_${PN} = "linux-firmware-iwlwifi"
 ### This breaks dependency resolution on external kernel modules like libarc4
 # where instead of kernel-modules-libarc4, dnf searches for backport-iwlwifikernel-modules-libarc4
 #KERNEL_MODULE_PACKAGE_PREFIX = "backport-iwlwifi"
 
 # CLEANBROKEN doesn't quite work since it needs clean ups, yet make clean is actually broken
-do_configure:append(){
+do_configure_append(){
 	git checkout compat kconf
 	# configure setup is broken and assumes only native build */
 	oe_runmake defconfig-iwlwifi-public CC="${BUILD_CC}"

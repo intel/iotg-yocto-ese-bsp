@@ -12,7 +12,7 @@ S = "${WORKDIR}/git/module"
 
 EXTRA_OEMAKE = 'KSRC="${STAGING_KERNEL_BUILDDIR}" KDIR="${STAGING_KERNEL_BUILDDIR}" KVER="${KERNEL_VERSION}" INSTALL_MOD_PATH="${D}"'
 
-do_install:append() {
+do_install_append() {
 	install -d ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/update
 	install -m 755 ${S}/*.ko ${D}${nonarch_base_libdir}/modules/${KERNEL_VERSION}/update/
 }

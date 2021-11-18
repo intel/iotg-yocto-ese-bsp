@@ -14,7 +14,7 @@ processors."
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://../COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 COMPATIBLE_HOST = '(x86_64.*|i.86.*)-linux'
-COMPATIBLE_HOST:libc-musl = "null"
+COMPATIBLE_HOST_libc-musl = "null"
 
 SRC_URI += "\
             file://COPYING \
@@ -37,7 +37,7 @@ EXTRA_OEMAKE = '\
 # into the dbg rpm.  STAGING_KERNEL_DIR will exist by the time
 # do_configure() is invoked so we can safely copy from it.
 #
-do_configure:prepend() {
+do_configure_prepend() {
 	mkdir -p ${S}
 	cp -r ${STAGING_KERNEL_DIR}/arch/x86/include/asm/msr-index.h ${S}
 	cp -r ${STAGING_KERNEL_DIR}/arch/x86/include/asm/intel-family.h ${S}

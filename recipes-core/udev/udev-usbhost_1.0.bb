@@ -23,7 +23,7 @@ do_install() {
 }
 
 
-RDEPENDS:${PN} = "udev"
+RDEPENDS_${PN} = "udev"
 
-FILES:${PN} += "${sysconfdir}/udev/rules.d/99-usbhost-bind.rules"
-FILES:${PN} += "${sysconfdir}/udev/rules.d/99-usbhost-offline.rules"
+FILES_${PN} += "${sysconfdir}/udev/rules.d/99-usbhost-bind.rules"
+FILES_${PN} += "${sysconfdir}/udev/rules.d/99-usbhost-offline.rules"

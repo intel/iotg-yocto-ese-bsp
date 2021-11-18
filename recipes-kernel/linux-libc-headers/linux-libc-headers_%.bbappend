@@ -1,6 +1,6 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${PN}:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 THISPATCHDIR := "${THISDIR}"
-SRC_URI:append = "${@bb.utils.contains('DISTRO_FEATURES', 'libc-abi-breaker-xdp', ' file://0001-net-xdp-add-txtime-field-in-xdp_desc-in-header-file.patch', '', d)}"
+SRC_URI_append = "${@bb.utils.contains('DISTRO_FEATURES', 'libc-abi-breaker-xdp', ' file://0001-net-xdp-add-txtime-field-in-xdp_desc-in-header-file.patch', '', d)}"
 
 python(){
   xdp_message = """
