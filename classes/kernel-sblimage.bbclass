@@ -55,7 +55,7 @@ fakeroot do_sblimage() {
 	fi
 }
 
-kernel_do_deploy_append() {
+kernel_do_deploy:append() {
 	install -m 0644 "${WORKDIR}/slimboot/sbl_os" "${DEPLOYDIR}/sbl_os-${KERNEL_VERSION_NAME}"
 }
 
@@ -68,8 +68,8 @@ do_sblimage[recrdeptask] += "do_sblimage_cmdline"
 
 addtask sblimage_cmdline
 addtask sblimage after do_install before kernel_do_deploy
-FILES_${KERNEL_PACKAGE_NAME}-image-sblimage = "/${KERNEL_IMAGEDEST}/${SBLIMAGE_BOOT_DEFAULT_CONTAINER} /${KERNEL_IMAGEDEST}/sbl_os-${KERNEL_VERSION_NAME}"
-PACKAGES_append = " ${KERNEL_PACKAGE_NAME}-image-sblimage"
+FILES:${KERNEL_PACKAGE_NAME}-image-sblimage = "/${KERNEL_IMAGEDEST}/${SBLIMAGE_BOOT_DEFAULT_CONTAINER} /${KERNEL_IMAGEDEST}/sbl_os-${KERNEL_VERSION_NAME}"
+PACKAGES:append = " ${KERNEL_PACKAGE_NAME}-image-sblimage"
 
 do_package[depends] += "${PN}:do_sblimage"
 do_deploy[depends] += "${PN}:do_sblimage"

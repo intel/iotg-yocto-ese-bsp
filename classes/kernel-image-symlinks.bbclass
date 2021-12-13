@@ -15,7 +15,7 @@
 # bzImage-${BPN}-kernel -> bzImage-5.4.66-intel-lts (where KERNEL_PACKAGE_NAME is "kernel")
 # bzImage-linux-intel-ese-lts-rt-5.4-kernel -> bzImage-5.4.61-rt37-intel-preempt-rt
 #
-kernel_do_install_append() {
+kernel_do_install:append() {
 	ln -s "${KERNEL_IMAGETYPE}-${KERNEL_VERSION}" "${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_PACKAGE_NAME}"
 	if test "${KERNEL_PACKAGE_NAME}" = "kernel"; then
 		ln -s "${KERNEL_IMAGETYPE}-${KERNEL_VERSION}" "${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${BPN}-${KERNEL_PACKAGE_NAME}"
@@ -26,7 +26,7 @@ python(){
   dest = d.getVar('KERNEL_IMAGEDEST')
   ktype = d.getVar('KERNEL_IMAGETYPE')
   bpn = d.getVar('BPN')
-  package = 'FILES_%s-image-%s' % (kpn, ktype.lower())
+  package = 'FILES:%s-image-%s' % (kpn, ktype.lower())
 
   d.appendVar(package, " /%s/%s-%s" % (dest, ktype, kpn))
   if kpn == 'kernel':
