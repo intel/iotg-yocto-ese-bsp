@@ -24,4 +24,3 @@ kconf hardware hybrid.cfg
 kconf hardware sriov.cfg
 kconf hardware pmt.cfg
 kconf hardware gfx.cfg
-kconf hardware udmabuf.cfg

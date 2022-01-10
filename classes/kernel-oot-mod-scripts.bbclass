@@ -32,7 +32,7 @@ python do_multikernel_clean(){
     except OSError:
         bb.note("%s not empty, ignoring")
 }
-CLEANFUNCS:append = " do_multikernel_clean"
+CLEANFUNCS_append = " do_multikernel_clean"
 
 # force make-mod-scripts to run first to avoid race condition if it is the default kernel
 python(){

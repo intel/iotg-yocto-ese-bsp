@@ -26,6 +26,6 @@ do_install() {
 }
 
 
-RDEPENDS:${PN} = "udev"
+RDEPENDS_${PN} = "udev"
 
-FILES:${PN} += "${sysconfdir}/udev/rules.d/99-sata-powersave.rules"
+FILES_${PN} += "${sysconfdir}/udev/rules.d/99-sata-powersave.rules"

@@ -33,7 +33,7 @@ SUMMARY = "Out of tree kernel drivers convenience installer"
 # against linux-intel-dev because of the "5.4" tag, vice versa for backport-iwlwifi-nextgen
 # and linux-intel-dev.
 #
-# Using IMAGE_INSTALL:append = " packagegroup-kernel-oot" will install all modules and its
+# Using IMAGE_INSTALL_append = " packagegroup-kernel-oot" will install all modules and its
 # combinations into the image. To install only a subset, use "packagegroup-kernel-oot-<tag>"
 # where only modules under the similar tag will be installed.
 
@@ -61,14 +61,14 @@ python(){
     pkgkeys = sorted(pkgsdict)
     # PACKAGES += ${PN}-5.4 [...]
     d.setVar('PACKAGES', '%s %s' % (pn, ' '.join(pkgkeys)))
-    # ALLOW_EMPTY:${PN} = "1"
-    d.setVar('ALLOW_EMPTY:' + pn, '1')
-    # RDEPENDS:${PN} += ${PN}-5.4 [...]
-    d.setVar('RDEPENDS:' + pn, ' '.join(pkgkeys))
+    # ALLOW_EMPTY_${PN} = "1"
+    d.setVar('ALLOW_EMPTY_' + pn, '1')
+    # RDEPENDS_${PN} += ${PN}-5.4 [...]
+    d.setVar('RDEPENDS_' + pn, ' '.join(pkgkeys))
 
     for pkg in pkgkeys:
-        # ALLOW_EMPTY:${PN}-5.4 = "1"
-        d.setVar('ALLOW_EMPTY:' + pkg, '1')
-        # RDEPENDS:${PN}-5.4 += <kernel>-<module> [...]
-        d.setVar('RDEPENDS:' + pkg, ' '.join(sorted(pkgsdict[pkg])))
+        # ALLOW_EMPTY_${PN}-5.4 = "1"
+        d.setVar('ALLOW_EMPTY_' + pkg, '1')
+        # RDEPENDS_${PN}-5.4 += <kernel>-<module> [...]
+        d.setVar('RDEPENDS_' + pkg, ' '.join(sorted(pkgsdict[pkg])))
 }
