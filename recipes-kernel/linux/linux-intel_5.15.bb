@@ -1,5 +1,5 @@
 # stub recipe
-require ./linux-intel-ese-lts-5.10.inc
+require ./linux-intel-iot-lts-5.15.inc
 require ./linux-intel-ese-lts.inc
 require ./yocto-kernel-cache.inc
 require recipes-kernel/linux/linux-yocto.inc

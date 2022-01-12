@@ -53,7 +53,7 @@ python copy_bpf_source_from_kernel() {
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-python do_package_prepend() {
+python do_package:prepend() {
     d.setVar('PKGV', d.getVar("KERNEL_VERSION", True).split("-")[0])
 }
 

@@ -1,0 +1,7 @@
+KBRANCH = "5.15/preempt-rt"
+KMETA_BRANCH = "yocto-5.15"
+SRCREV_meta = "22f3af23297303c8f884a89b603729eb6fb07eda"
+SRCREV_machine ?= "8e1419fa3366aa33fa0e0b53f957fdab50a70e24"
+LINUX_VERSION ?= "5.15.5"
+LINUX_KERNEL_TYPE = "preempt-rt"
+LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"

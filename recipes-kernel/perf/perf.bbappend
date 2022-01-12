@@ -1,4 +1,4 @@
-PERF_SRC_append ?= "scripts/ \
+PERF_SRC:append ?= "scripts/ \
              arch/${ARCH}/Makefile \
 "
 
