@@ -36,25 +36,6 @@ python multikernel_virtclass_handler() {
     d.appendVarFlag('do_configure', 'depends', ' %s:do_multikernel_setup' % provider)
 
     # KBUILD_EXTRA_SYMBOLS should no longer need to be modified if ${PN} is updated
-
-    # assume users know what they're doing, workaround for dpdk-module that sets COMPATIBLE_MACHINE to null in meta-dpdk
-    # but set to intel-corei7-64 in meta-intel. Unfortunately, meta-intel only sets the overrides for the unprefixed recipe.
-    oot_message = """
-***********************************************************************
-*** Recipe mc:{1}:{0} sets COMPATIBLE_MACHINE to 'null' but the multikernel
-*** out-of-tree system is used to extend it. The original recipe may have
-*** it overidden elsewhere, overriding it to {3} in mc:{1}:{2}-{0}.
-*** This may not be the right thing to do if this out of tree module
-*** is not supposed to be built with {2} or {3}.
-***********************************************************************
-"""
-
-    compat = d.getVar('COMPATIBLE_MACHINE')
-    machine = d.getVar('MACHINE')
-    mc = d.getVar('BB_CURRENT_MC')
-    if compat == 'null':
-      bb.warn(oot_message.format(pn, mc, provider, machine))
-      d.setVar('COMPATIBLE_MACHINE', machine)
 }
 
 export KERNEL_VERSION = "${@oe.utils.read_file('${STAGING_KERNEL_BUILDDIR}/abiversion')}"
