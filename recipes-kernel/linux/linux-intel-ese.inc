@@ -60,6 +60,9 @@ KERNEL_FEATURES:append:x86-64 = " ${@bb.utils.contains("MACHINE_FEATURES","tpm",
 # from meta-virtualization, optional for zeus
 include ${@bb.utils.contains('LAYERSERIES_CORENAMES', 'zeus', 'recipes-kernel/linux/linux-yocto_virtualization.inc', '', d)}
 
+# docker support
+KERNEL_FEATURES:append = " features/docker/docker.scc"
+
 #########
 # common
 #########

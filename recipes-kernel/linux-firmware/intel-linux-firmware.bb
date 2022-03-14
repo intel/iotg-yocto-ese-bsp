@@ -10,7 +10,7 @@ NO_GENERIC_LICENSE[Firmware-i915] = "LICENSE.i915"
 
 SRC_URI = "git://github.com/intel/intel-linux-firmware.git;branch=main;protocol=https"
 
-SRCREV = "ade1f0e20a8b25b0905981bc0c72c1a19f5350f4"
+SRCREV = "a9d99513513df9e34e6404e1558ad69669d69259"
 
 S = "${WORKDIR}/git"
 
