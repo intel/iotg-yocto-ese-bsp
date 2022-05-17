@@ -18,8 +18,14 @@ SBLIMAGE_BOOT_SUPPORTS_SOFTLINK ?= "1"
 
 inherit python3native
 python do_sblimage_cmdline() {
-  name = d.getVar('PN')
-  # slimboot doesn't really do alternate menus, just try to guess based on ${PN}
+  pn = d.getVar('PN')
+  # only handle first name item
+  namestring = d.getVarFlag('MENDER_GRUBCONF_KERNELS_MENU', pn)
+  if namestring:
+    name = namestring.split()[0]
+  else:
+    name = pn
+  # slimboot doesn't really do alternate menus, just try to guess based on name above
   k_cmdline = d.getVarFlag('MENDER_GRUBCONF_KERNELS', name)
   default_cmdline = d.getVar('APPEND')
   extras_default = d.getVar('MENDER_GRUBCONF_KERNELS_DEFAULT')
