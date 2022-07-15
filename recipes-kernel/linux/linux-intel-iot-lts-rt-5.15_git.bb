@@ -17,3 +17,6 @@ SRC_URI:append = " file://bsp/${BSP_SUBTYPE}/audio-adl.scc"
 
 #Enable Universal Flash Storage BSG device node for ADL-P on 5.15 kernel
 SRC_URI:append = " file://bsp/${BSP_SUBTYPE}/ufs-bsg.scc"
+
+#Enable 5G modem support for ADL-P SW LZ on 5.15 kernel
+SRC_URI:append = " file://bsp/${BSP_SUBTYPE}/wwan.scc"
