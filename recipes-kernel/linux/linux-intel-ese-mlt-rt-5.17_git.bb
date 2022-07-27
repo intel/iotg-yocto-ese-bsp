@@ -3,7 +3,7 @@ require ./yocto-kernel-cache.inc
 require ./linux-intel-ese.inc
 
 KERNEL_SRC_URI = "git://github.com/intel/mainline-tracking.git;protocol=https;branch=${KBRANCH};name=machine"
-SRCREV_machine = "a4d683298143b8c5507ac8f0db9442ae43493e15"
+SRCREV_machine = "2489a843e0d067264e9ddbfe1d34e2d86a62b7b1"
 LINUX_VERSION = "5.17-rc3-rt6"
 LINUX_KERNEL_TYPE = "preempt-rt"
 KBRANCH = "preempt-rt/v5.17-rc3-rt6"
