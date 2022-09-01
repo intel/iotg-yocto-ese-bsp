@@ -1,6 +1,6 @@
 KBRANCH = "5.4/preempt-rt"
 KMETA_BRANCH = "yocto-5.4"
-SRCREV_meta = "010ac788e81b6cb6c3fd2367802eee9d8feac34f"
+SRCREV_meta = "028688aaad2b64e353d771ba5505a8666cd01696"
 SRCREV_machine ?= "5776551e21679ed5fec50abbdf4627920b4103b1"
 LINUX_VERSION ?= "5.4.193"
 LINUX_KERNEL_TYPE = "preempt-rt"

@@ -9,7 +9,6 @@ require recipes-kernel/linux/meta-intel-compat-kernel.inc
 DEPENDS += "elfutils-native openssl-native util-linux-native"
 SRC_URI:append = " file://0001-menuconfig-mconf-cfg-Allow-specification-of-ncurses-.patch \
                    file://0001-io-mapping-Cleanup-atomic-iomap.patch \
-                   file://0001-regulator-consumer-Add-missing-stubs-to-regulator-co.patch \
                  "
 # For Crystalforest and Romley
 KERNEL_MODULE_AUTOLOAD:append_core2-32-intel-common = " uio"
