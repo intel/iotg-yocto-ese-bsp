@@ -16,6 +16,9 @@ SBLIMAGE_BOOT_DEFAULT_CONTAINER ?= "sbl_os"
 # Does loader support symlink?
 SBLIMAGE_BOOT_SUPPORTS_SOFTLINK ?= "1"
 
+# default value of WKS_SBL_HINT
+WKS_SBL_HINT ?= ""
+
 inherit python3native
 python do_sblimage_cmdline() {
   pn = d.getVar('PN')
@@ -29,14 +32,15 @@ python do_sblimage_cmdline() {
   k_cmdline = d.getVarFlag('MENDER_GRUBCONF_KERNELS', name)
   default_cmdline = d.getVar('APPEND')
   extras_default = d.getVar('MENDER_GRUBCONF_KERNELS_DEFAULT')
+  wks_sbl_hint = d.getVar('WKS_SBL_HINT')
 
-  cmdline = "{0} {1}".format(default_cmdline, k_cmdline or extras_default or '')
+  cmdline = "{0} {1} {2}".format(default_cmdline, k_cmdline or extras_default or '', wks_sbl_hint)
 
   wd = d.getVar('WORKDIR')
   with open(os.path.join(wd, 'sbl_cmdline.txt'), 'w') as sbl_cmdline:
     sbl_cmdline.write(cmdline.strip())
 }
-do_sblimage_cmdline[vardeps] += "APPEND MENDER_GRUBCONF_KERNELS MENDER_GRUBCONF_KERNELS_DEFAULT"
+do_sblimage_cmdline[vardeps] += "APPEND MENDER_GRUBCONF_KERNELS MENDER_GRUBCONF_KERNELS_DEFAULT WKS_SBL_HINT"
 
 fakeroot do_sblimage() {
 	local auth
