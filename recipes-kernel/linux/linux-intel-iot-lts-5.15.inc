@@ -1,6 +1,6 @@
 KBRANCH = "5.15/linux"
 KMETA_BRANCH = "yocto-5.15"
-SRCREV_meta = "f475b1a9deddbde23f48d7d535abdd5fb133b837"
+SRCREV_meta = "ce85739c7e1d9d9454ca08db22842486087de5f2"
 SRCREV_machine ?= "3d87b60810db4dc565a7519cdd22de7c576acc6d"
 LINUX_VERSION ?= "5.15.71"
 LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"

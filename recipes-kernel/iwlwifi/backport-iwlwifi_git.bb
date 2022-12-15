@@ -14,8 +14,8 @@ SRC_URI = "git://github.com/intel/backport-iwlwifi.git;nobranch=1;protocol=https
            file://iwlwifi.conf \
           "
 
-PV = "70-63+git${SRCPV}"
-SRCREV = "1529463db37ca69fda509caf9e3b954926bd9dba"
+PV = "72-55+git${SRCPV}"
+SRCREV = "38c45876beece0c0db5a1314b0205d2eb8229d9c"
 
 S = "${WORKDIR}/git/iwlwifi-stack-dev"
 
@@ -41,5 +41,5 @@ do_configure:append(){
 	git checkout compat kconf
 	# configure setup is broken and assumes only native build */
 	oe_runmake defconfig-iwlwifi-public CC="${BUILD_CC}"
-	sed -i 's/CPTCFG_IWLMVM_VENDOR_CMDS=y/# CPTCFG_IWLMVM_VENDOR_CMDS is not set/' ${S}/.config
+	# sed -i 's/CPTCFG_IWLMVM_VENDOR_CMDS=y/# CPTCFG_IWLMVM_VENDOR_CMDS is not set/' ${S}/.config
 }
