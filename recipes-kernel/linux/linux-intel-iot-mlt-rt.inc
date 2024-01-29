@@ -1,8 +1,13 @@
-require ./linux-intel-ese-mlt.inc
+require ./linux-intel-iot-mlt.inc
 require ./yocto-kernel-cache.inc
 require ./linux-intel-ese.inc
 
-LINUX_VERSION_EXTENSION:append = "-mainline-tracking"
+KERNEL_SRC_URI = "git://github.com/intel/mainline-tracking.git;protocol=https;branch=${KBRANCH};name=machine"
+SRCREV_machine = "b992e89f5a0ab40c879f98ee290a9c15025aa2e4"
+LINUX_VERSION = "v6.5-rt5"
+LINUX_KERNEL_TYPE = "preempt-rt"
+KBRANCH = "preempt-rt/v6.5-rt5"
+
 KERNEL_PACKAGE_NAME = "${PN}-kernel"
 
 # Optional kernel security harderning that may interfere with debugging
