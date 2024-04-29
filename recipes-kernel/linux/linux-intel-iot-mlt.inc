@@ -1,7 +1,7 @@
 KERNEL_SRC_URI ?= "git://github.com/intel/mainline-tracking.git;protocol=https;branch=${KBRANCH};name=machine"
 SRC_URI = "${KERNEL_SRC_URI}"
 KMETA_BRANCH = "yocto-6.5"
-SRCREV_meta = "a95d29b1b6e4b6375c12201d60892089b467b3bc"
+SRCREV_meta = "a73f39d9cf9469816fa9cba31bc8bbbc8e0617d8"
 SRCREV_machine ?= "d8b384342b6412f52ae4617a0f4d3719b0786cc8"
 LINUX_VERSION = "6.5.0"
 KBRANCH = "linux/v6.5"
