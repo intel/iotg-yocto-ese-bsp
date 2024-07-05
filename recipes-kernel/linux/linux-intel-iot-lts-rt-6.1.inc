@@ -1,7 +1,0 @@
-KBRANCH = "6.1/preempt-rt"
-KMETA_BRANCH = "yocto-6.1"
-SRCREV_meta = "8b555bd39017d9e6b19a0e2c98e563c5ebccef14"
-SRCREV_machine ?= "e370d95b5c8188c2c9ca3bf2b8814de91bbb5f6d"
-LINUX_VERSION = "6.1.80"
-LINUX_KERNEL_TYPE = "preempt-rt"
-LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
