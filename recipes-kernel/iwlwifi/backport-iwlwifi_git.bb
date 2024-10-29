@@ -27,8 +27,9 @@ DEPENDS:append = " flex-native bison-native"
 
 do_install:append() {
 	## install configs and service scripts
-	install -d ${D}${sysconfdir}/modprobe.d
-	install -m 0644 ${WORKDIR}/iwlwifi.conf ${D}${sysconfdir}/modprobe.d
+        install -d ${D}${nonarch_base_libdir}/modprobe.d
+        install -m 0644 ${WORKDIR}/iwlwifi.conf ${D}${nonarch_base_libdir}/modprobe.d/iwlwifi.conf
+
 }
 
 RDEPENDS:${PN} = "linux-firmware-iwlwifi"
@@ -40,6 +41,7 @@ RDEPENDS:${PN} = "linux-firmware-iwlwifi"
 do_configure:append(){
 	git checkout compat kconf
 	# configure setup is broken and assumes only native build */
-	oe_runmake defconfig-iwlwifi-public CC="${BUILD_CC}"
+	oe_runmake defconfig-iwlwifi-public CC="${BUILD_CC}" CFLAGS="${BUILD_CFLAGS}" LDFLAGS="${BUILD_LDFLAGS}"
 	# sed -i 's/CPTCFG_IWLMVM_VENDOR_CMDS=y/# CPTCFG_IWLMVM_VENDOR_CMDS is not set/' ${S}/.config
 }
+FILES:${PN} += "${nonarch_base_libdir}/modprobe.d/iwlwifi.conf"

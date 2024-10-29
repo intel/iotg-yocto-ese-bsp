@@ -11,7 +11,7 @@ python do_put_initramfs(){
 
     image_cpio = d.getVar("INITRAMFS_IMAGE_PATH")
     if not image_cpio:
-        image_cpio = d.expand("${DEPLOY_DIR_IMAGE}/${INITRAMFS_IMAGE}-${MACHINE}.cpio")
+        image_cpio = d.expand("${DEPLOY_DIR_IMAGE}/${INITRAMFS_IMAGE}-${MACHINE}${IMAGE_NAME_SUFFIX}.cpio")
 
     if not os.path.isfile(image_cpio):
         bb.error("initramfs %s not found!" % image_cpio)

@@ -47,7 +47,7 @@ fakeroot do_sblimage() {
 	if test -n "${SBLIMAGE_AUTH}"; then
 		auth="-a ${SBLIMAGE_AUTH}"
 	else
-		auth=""
+		auth="-a RSA3072_PSS_SHA2_384"
 	fi
 	${PYTHON} ${STAGING_DIR_NATIVE}/${libexecdir}/slimboot/Tools/GenContainer.py create -cl CMDL:${WORKDIR}/sbl_cmdline.txt \
 		KRNL:${D}/${KERNEL_IMAGEDEST}/${KERNEL_IMAGETYPE}-${KERNEL_VERSION} INRD:${SBLIMAGE_INITRD_PATH} \

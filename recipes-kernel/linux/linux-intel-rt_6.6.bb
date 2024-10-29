@@ -11,9 +11,8 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/linux-intel:"
 DEPENDS += "elfutils-native openssl-native util-linux-native"
 
 SRC_URI:append = " file://0001-vt-conmakehash-improve-reproducibility.patch \
-                   file://0001-lib-build_OID_registry-fix-reproducibility-issues.patch \
                    file://fix-perf-reproducibility.patch \
-                   file://0001-v6.6-menuconfig-mconf-cfg-Allow-specification-of-ncurses-.patch \
+                   file://0001-menuconfig-mconf-cfg-Allow-specification-of-ncurses-.patch \
                    file://0002-mconf-fix-output-of-cflags-and-libraries.patch \
                  "
 
