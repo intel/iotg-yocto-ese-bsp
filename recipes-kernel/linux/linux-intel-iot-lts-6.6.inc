@@ -1,6 +1,0 @@
-KBRANCH = "6.6/linux"
-KMETA_BRANCH = "yocto-6.6"
-SRCREV_meta = "99c5ec65d21cd824d26ee9eb8bca7d2e59311e5f"
-SRCREV_machine ?= "aff52723c5d6089d65ea473d150c7d3886209612"
-LINUX_VERSION ?= "6.6.58"
-LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"

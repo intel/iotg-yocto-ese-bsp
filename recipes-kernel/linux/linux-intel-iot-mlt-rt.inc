@@ -1,8 +1,0 @@
-KERNEL_SRC_URI = "git://github.com/intel/mainline-tracking.git;protocol=https;branch=${KBRANCH};name=machine"
-SRC_URI = "${KERNEL_SRC_URI}"
-SRCREV_meta = "d0a9016bf6c4d098845d4bbef2083ffeed0ed0c8"
-SRCREV_machine ?= "2ccfddbfbc390c891971a743f1efc85d1f425f36"
-LINUX_VERSION = "6.11.0"
-LINUX_KERNEL_TYPE = "preempt-rt"
-KBRANCH = "preempt-rt/v6.11-rt7"
-LIC_FILES_CHKSUM = "file://COPYING;md5=6bc538ed5bd9a7fc9398086aedcd7e46"
